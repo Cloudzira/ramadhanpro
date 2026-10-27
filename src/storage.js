@@ -26,15 +26,17 @@ function openDatabase() {
 
 export async function loadSnapshot(key, legacySnapshot) {
   try {
+    if (legacySnapshot) {
+      await saveSnapshot(key, legacySnapshot);
+      return legacySnapshot;
+    }
     const database = await openDatabase();
     const saved = await new Promise((resolve, reject) => {
       const request = database.transaction(SNAPSHOT_STORE, 'readonly').objectStore(SNAPSHOT_STORE).get(key);
       request.onsuccess = () => resolve(request.result?.value || null);
       request.onerror = () => reject(request.error);
     });
-    if (saved) return saved;
-    await saveSnapshot(key, legacySnapshot);
-    return legacySnapshot;
+    return saved;
   } catch {
     return legacySnapshot;
   }

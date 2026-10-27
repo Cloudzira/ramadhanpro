@@ -6,7 +6,6 @@
   <meta name="theme-color" content="#102b25">
   <meta name="description" content="Pendamping ibadah privat dari persiapan Ramadhan hingga istiqamah setelah Syawal.">
   <title>RamadhanPro — perjalanan ibadahmu</title>
-  <link rel="manifest" href="%BASE_URL%manifest.json">
   <link rel="icon" href="%BASE_URL%icon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -85,11 +84,12 @@
     const quoteBank=[['Sebaik-baik bekal adalah takwa.','QS. Al-Baqarah: 197'],['Amalan yang paling dicintai Allah adalah yang terus-menerus, meski sedikit.','HR. Bukhari dan Muslim'],['Ingatlah, hanya dengan mengingat Allah hati menjadi tenteram.','QS. Ar-Ra’d: 28'],['Sesungguhnya bersama kesulitan ada kemudahan.','QS. Al-Insyirah: 6']];
     const defaults={settings:{ramadanStart:'2027-02-08',qadhaOwed:0,qadhaDone:0,qadhaDeadline:'2027-02-07',quranGoal:30,sadaqahGoal:0,zakatFitrah:45000,nisab:85000000,tarawihTarget:30,theme:'muslim',mode:'dark',displayName:'Sahabat',city:'',latitude:null,longitude:null,prayerMethod:'indonesia',madhab:'shafi',imsakOffset:10,timezone:Intl.DateTimeFormat().resolvedOptions().timeZone},days:{},fasting:{preRamadan:[],syawal:[]},prepDone:[],duas:[],family:[],kajian:[],infaq:[],card:{recipient:'Keluarga dan sahabat',sender:'',message:'Selamat Idulfitri. Mohon maaf lahir dan batin. Semoga Allah menerima amal ibadah kita.'},zakatFitrahPaid:false,habits:{},iktikaf:false};
     function mergeSnapshot(saved){return {...structuredClone(defaults),...saved,settings:{...defaults.settings,...saved?.settings},days:saved?.days||{},fasting:{...defaults.fasting,...saved?.fasting},kajian:saved?.kajian||[],infaq:saved?.infaq||[],card:{...defaults.card,...saved?.card}}}
-    function load(){try{const saved=JSON.parse(localStorage.getItem(KEY)||'null');return mergeSnapshot(saved||{})}catch{return structuredClone(defaults)}}
+    let legacySnapshotPresent=false;
+    function load(){try{const raw=localStorage.getItem(KEY);legacySnapshotPresent=raw!==null;const saved=JSON.parse(raw||'null');return mergeSnapshot(saved||{})}catch{return structuredClone(defaults)}}
     let db=load(),view='home',selectedDate=keyOf(new Date()),toastTimer;
     let persistTimer,localChanges=false;
     function save(){localChanges=true;try{localStorage.setItem(KEY,JSON.stringify(db));clearTimeout(persistTimer);const snapshot=structuredClone(db);persistTimer=setTimeout(()=>saveSnapshot(KEY,snapshot).catch(()=>{}),150)}catch{notify('Penyimpanan perangkat penuh. Unduh cadangan data.')}}
-    loadSnapshot(KEY,db).then(saved=>{if(!localChanges)db=mergeSnapshot(saved);save();render()}).catch(()=>{});
+    loadSnapshot(KEY,legacySnapshotPresent?db:null).then(saved=>{if(!localChanges&&saved)db=mergeSnapshot(saved);save();render()}).catch(()=>{});
     function keyOf(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
     function dayRecord(k=selectedDate){return db.days[k] ||= {prayers:Array(5).fill(false),tasks:{},pages:0,sadaqah:0,water:[false,false,false,false,false,false,false,false],fast:false,mood:0,note:'',dua:''}}
     function esc(s=''){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
@@ -149,7 +149,6 @@
     document.addEventListener('change',e=>{const field=e.target.closest('[data-prayer-setting]');if(!field)return;e.stopImmediatePropagation();const key=field.dataset.prayerSetting,value=['latitude','longitude','imsakOffset'].includes(key)?(field.value===''?null:Number(field.value)):field.value;db.settings[key]=value;save();render()},true);
     document.addEventListener('change',e=>{const field=e.target;if(field.matches('[data-action="fast-date"]')&&field.closest('#syawal-tracker')){e.stopImmediatePropagation();addFast('syawal',field.value)}},true);
     window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();window.installPrompt=e});
-    if('serviceWorker'in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register(`${import.meta.env.BASE_URL}sw.js`).catch(()=>{}));
     render();
   </script>
 </body>
