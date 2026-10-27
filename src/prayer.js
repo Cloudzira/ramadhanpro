@@ -76,6 +76,15 @@ export function calculatePrayerSchedule({
       Maghrib: formatTime(times.maghrib, timeZone),
       Isya: formatTime(times.isha, timeZone),
     },
+    epoch: {
+      Imsak: imsakDate.getTime(),
+      Subuh: times.fajr.getTime(),
+      Terbit: times.sunrise.getTime(),
+      Dzuhur: times.dhuhr.getTime(),
+      Ashar: times.asr.getTime(),
+      Maghrib: times.maghrib.getTime(),
+      Isya: times.isha.getTime(),
+    },
     qiblaBearing: Math.round(Qibla(coordinates) * 10) / 10,
   };
 }
