@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="muslim">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Muhasabah – Jurnal Harian Muslim & Muslimah</title>
+<meta name="description" content="Jurnal muhasabah harian: evaluasi diri, ibadah, syukur, dan motivasi islami.">
+<meta name="theme-color" content="#0B2421">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0B2421;--sf:#123530;--sf2:#184640;--ac:#D6B15E;--on:#1A1405;--tx:#EEF4F0;--mu:#9DB5AC;--ln:rgba(255,255,255,.1);--r:18px}
+[data-theme=muslimah]{--bg:#251630;--sf:#331F42;--sf2:#412853;--ac:#E9AE95;--on:#2A130B;--tx:#F7EFF3;--mu:#B9A3C0}
+*{box-sizing:border-box;margin:0;-webkit-tap-highlight-color:transparent}
+html{background:var(--bg)}
+body{font:15px/1.6 'Plus Jakarta Sans',system-ui,sans-serif;color:var(--tx);min-height:100vh;
+background:radial-gradient(120% 60% at 50% -10%,var(--sf2),transparent 70%),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64'%3E%3Cg fill='none' stroke='white' stroke-opacity='.045'%3E%3Crect x='16' y='16' width='32' height='32'/%3E%3Crect x='16' y='16' width='32' height='32' transform='rotate(45 32 32)'/%3E%3C/g%3E%3C/svg%3E"),var(--bg)}
+button,input,textarea,select{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none}
+:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+h1,h2{font-family:Amiri,serif;font-weight:700;line-height:1.2}
+h1{font-size:2rem}h2{font-size:1.35rem;margin:22px 0 10px}
+.mu{color:var(--mu)}.sm{font-size:.85rem}
+#app{max-width:520px;margin:0 auto;padding:max(18px,env(safe-area-inset-top)) 18px 110px}
+.card{background:var(--sf);border:1px solid var(--ln);border-radius:var(--r);padding:16px;margin-top:14px}
+.hero{display:flex;gap:18px;align-items:center}
+.ring{--p:0;width:92px;height:92px;border-radius:50%;flex:none;display:grid;place-items:center;background:conic-gradient(var(--ac) calc(var(--p)*1%),var(--sf2) 0)}
+.ring b{width:72px;height:72px;border-radius:50%;background:var(--sf);display:grid;place-items:center;font-size:1.15rem}
+.big{font-family:Amiri,serif;font-size:1.4rem;margin:2px 0 10px}
+.btn{background:var(--ac);color:var(--on);font-weight:700;padding:10px 18px;border-radius:999px}
+.btn.ghost{background:transparent;color:var(--tx);border:1px solid var(--ln)}
+.btn.sm{padding:6px 14px;font-size:.85rem}
+.quote p{font-family:Amiri,serif;font-size:1.3rem;line-height:1.55;margin:6px 0}
+.src{color:var(--ac);font-size:.85rem;font-weight:600}
+.row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--ln)}
+.row:last-child{border:0}
+.chip{padding:6px 14px;border-radius:999px;border:1px solid var(--ln);color:var(--mu);font-size:.85rem;min-width:104px}
+.chip.s1{background:var(--sf2);color:var(--tx);border-color:var(--ac)}
+.chip.s2{background:var(--ac);color:var(--on);border-color:var(--ac);font-weight:700}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.tg{padding:11px 10px;border-radius:14px;border:1px solid var(--ln);text-align:left;font-size:.88rem;color:var(--mu)}
+.tg.on{background:var(--ac);color:var(--on);font-weight:700;border-color:var(--ac)}
+.moods{display:flex;justify-content:space-between}
+.moods button{font-size:1.7rem;width:54px;height:54px;border-radius:50%;border:1px solid var(--ln);filter:grayscale(1);opacity:.7}
+.moods button.on{filter:none;opacity:1;background:var(--sf2);border-color:var(--ac)}
+label.f{display:block;margin-top:14px;font-weight:600}
+label.f small{display:block;color:var(--mu);font-weight:400}
+textarea,input[type=text],input[type=date],select{width:100%;margin-top:6px;background:var(--bg);border:1px solid var(--ln);border-radius:12px;padding:10px 12px}
+textarea{min-height:84px;resize:vertical}
+.bars{display:flex;gap:8px;align-items:flex-end;height:130px;margin-top:10px}
+.bars div{flex:1;text-align:center;font-size:.75rem;color:var(--mu);display:flex;flex-direction:column;justify-content:flex-end;height:100%}
+.bars i{display:block;background:var(--ac);border-radius:8px 8px 3px 3px;min-height:3px;margin-bottom:4px}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stats .card{margin:0;text-align:center}.stats b{display:block;font-family:Amiri,serif;font-size:1.9rem;color:var(--ac)}
+.item{display:flex;gap:12px;align-items:center;justify-content:space-between}
+.item p{color:var(--mu);font-size:.85rem;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.sw{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:12px;font-size:.9rem}
+nav{position:fixed;left:0;right:0;bottom:0;background:var(--sf);border-top:1px solid var(--ln);padding:6px 10px max(8px,env(safe-area-inset-bottom));z-index:5}
+nav div{max-width:520px;margin:auto;display:flex}
+nav button{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;color:var(--mu);font-size:.7rem;padding:6px 0}
+nav button.on{color:var(--ac);font-weight:700}
+svg.i{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.foot{text-align:center;margin:34px 0 4px;color:var(--mu);font-size:.8rem}
+.foot div{display:flex;gap:10px;justify-content:center;margin-top:8px}
+.foot a{width:36px;height:36px;border-radius:50%;border:1px solid var(--ln);display:grid;place-items:center;color:var(--tx)}
+.foot svg{width:17px;height:17px}
+#sp{position:fixed;inset:0;z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;background:radial-gradient(90% 55% at 50% 38%,var(--sf2),var(--bg));transition:opacity .6s,visibility .6s}
+#sp.out{opacity:0;visibility:hidden}
+#sp .lg{width:128px;animation:pop 1s cubic-bezier(.2,.9,.3,1) both}
+#sp h1{margin-top:16px;font-size:2.4rem;letter-spacing:.04em;animation:fd 1s .5s both}
+#sp .ar{font-family:Amiri,serif;font-size:1.5rem;color:var(--ac);animation:fd 1s .35s both}
+#sp .tg2{color:var(--mu);animation:fd 1s .8s both}
+#sp .bar{width:120px;height:3px;background:var(--sf2);border-radius:3px;margin-top:26px;overflow:hidden}
+#sp .bar i{display:block;height:100%;background:var(--ac);animation:ld 2.1s ease-out both}
+#sp .foot{position:absolute;bottom:max(22px,env(safe-area-inset-bottom));margin:0}
+@keyframes pop{from{opacity:0;transform:scale(.6) rotate(-8deg)}}
+@keyframes fd{from{opacity:0;transform:translateY(8px)}}
+@keyframes ld{from{width:0}}
+.ob{text-align:center;padding-top:8vh}.ob .lg{width:96px}
+.ob input{text-align:center;margin:18px 0 12px}
+.ob .pick{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ob .pick button{padding:16px 8px;border-radius:16px;border:1px solid var(--ln);background:var(--sf);font-weight:700}
+.ob .pick button:first-child{border-color:#D6B15E;color:#D6B15E}.ob .pick button:last-child{border-color:#E9AE95;color:#E9AE95}
+#toast{position:fixed;left:50%;bottom:92px;transform:translateX(-50%) translateY(20px);background:var(--ac);color:var(--on);padding:9px 18px;border-radius:999px;font-weight:600;opacity:0;pointer-events:none;transition:.3s;z-index:60}
+#toast.on{opacity:1;transform:translateX(-50%)}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01s!important;animation-delay:0s!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div id="sp"></div>
+<main id="app"></main>
+<nav id="nav" hidden><div></div></nav>
+<div id="toast" role="status"></div>
+<script>
+/* ===== Util & data ===== */
+const $=s=>document.querySelector(s);
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const K='muhasabah_v1';
+let db;try{db=JSON.parse(localStorage.getItem(K))||{}}catch(e){db={}}
+db.entries=db.entries||{};
+const save=()=>{try{localStorage.setItem(K,JSON.stringify(db))}catch(e){toast('Penyimpanan browser penuh atau diblokir')}};
+const pad=n=>String(n).padStart(2,'0');
+const dkey=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+const today=()=>dkey(new Date());
+const pd=k=>{const[a,b,c]=k.split('-').map(Number);return new Date(a,b-1,c)};
+let tab='home',date=today(),cur,dp;
+function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('on'),2200)}
+
+const SH=['Subuh','Dzuhur','Ashar','Maghrib','Isya'];
+const AM=['Tilawah Al-Qur\'an','Dzikir pagi & petang','Sholat Dhuha','Qiyamul lail','Sedekah','Puasa sunnah','Berbakti pada orang tua','Istighfar & doa'];
+const MOOD=['😞','😕','😐','🙂','😊'];
+const blank=()=>({s:[0,0,0,0,0],a:[0,0,0,0,0,0,0,0],m:0,sy:'',kh:'',tb:'',ni:'',uz:0});
+const ent=k=>Object.assign(blank(),db.entries[k]||{});
+const has=e=>!!e&&(e.s.some(x=>x)||e.a.some(x=>x)||e.m||e.sy||e.kh||e.tb||e.ni);
+const score=e=>{const den=(e.uz?0:5)+8,pts=(e.uz?0:e.s.filter(x=>x).length)+e.a.filter(x=>x).length;return Math.round(pts/den*100)};
+function streak(){const d=new Date();let n=0;if(!has(db.entries[dkey(d)]))d.setDate(d.getDate()-1);while(has(db.entries[dkey(d)])){n++;d.setDate(d.getDate()-1)}return n}
+function setDate(k){date=k;cur=ent(k)}
+function touch(){db.entries[date]=cur;save()}
+
+/* ===== Konten ===== */
+const Q=[
+{t:'Hisablah dirimu sebelum kamu dihisab, dan timbanglah amalmu sebelum ia ditimbang.',s:'Atsar Umar bin Khattab r.a.'},
+{t:'Hai orang-orang beriman, bertakwalah kepada Allah dan hendaklah setiap diri memperhatikan apa yang telah ia perbuat untuk hari esok.',s:'QS. Al-Hasyr: 18'},
+{t:'Ingatlah, hanya dengan mengingat Allah hati menjadi tenteram.',s:'QS. Ar-Ra\'d: 28'},
+{t:'Sesungguhnya setiap amal tergantung pada niatnya.',s:'HR. Bukhari dan Muslim'},
+{t:'Iringilah keburukan dengan kebaikan, niscaya kebaikan itu menghapusnya.',s:'HR. Tirmidzi'},
+{t:'Sesungguhnya bersama kesulitan ada kemudahan.',s:'QS. Al-Insyirah: 5'},
+{t:'Jika kamu bersyukur, pasti Kami tambah nikmat kepadamu.',s:'QS. Ibrahim: 7'},
+{t:'Dua nikmat yang sering dilalaikan manusia: kesehatan dan waktu luang.',s:'HR. Bukhari'},
+{t:'Amalan yang paling dicintai Allah adalah yang terus-menerus, walau sedikit.',s:'HR. Bukhari dan Muslim'},
+{t:'Janganlah kamu berputus asa dari rahmat Allah. Sesungguhnya Allah mengampuni dosa semuanya.',s:'QS. Az-Zumar: 53'},
+{t:'Allah tidak melihat rupa dan hartamu, tetapi melihat hati dan amalmu.',s:'HR. Muslim'},
+{t:'Allah tidak membebani seseorang melainkan sesuai kesanggupannya.',s:'QS. Al-Baqarah: 286'},
+{t:'Bersuci adalah separuh dari iman.',s:'HR. Muslim'},
+{t:'Sebaik-baik kalian adalah yang terbaik akhlaknya kepada keluarganya.',s:'HR. Tirmidzi'},
+{t:'Barangsiapa menempuh jalan untuk mencari ilmu, Allah mudahkan baginya jalan menuju surga.',s:'HR. Muslim',g:'a'}
+];
+const QG={muslim:[{t:'Sholat berjamaah lebih utama dua puluh tujuh derajat daripada sholat sendirian.',s:'HR. Bukhari dan Muslim'},{t:'Laki-laki adalah pemimpin bagi keluarganya dan akan ditanya tentang kepemimpinannya.',s:'HR. Bukhari dan Muslim'}],
+muslimah:[{t:'Dunia adalah perhiasan, dan sebaik-baik perhiasan dunia adalah wanita shalihah.',s:'HR. Muslim'},{t:'Surga berada di bawah telapak kaki ibu.',s:'Riwayat An-Nasa\'i'}]};
+const REN=['Apa satu hal yang paling kamu syukuri hari ini?','Sholat mana yang paling berkualitas hari ini, dan mana yang perlu dibenahi?','Adakah ucapan atau sikap yang menyakiti orang lain hari ini?','Kapan hatimu paling tenang hari ini, dan apa penyebabnya?','Apa yang paling sering menunda ibadahmu, dan bagaimana mengatasinya?','Kebaikan kecil apa yang bisa kamu lakukan besok?','Siapa yang perlu kamu mintai maaf atau kamu doakan?'];
+const dayIdx=()=>Math.floor((Date.now()-new Date().getTimezoneOffset()*6e4)/864e5);
+const quote=()=>{const p=Q.concat(QG[db.profile.gender]||[]);return p[dayIdx()%p.length]};
+
+/* ===== Logo & ikon ===== */
+const LOGO=(c)=>`<svg class="lg" viewBox="0 0 100 100" aria-label="Logo Muhasabah"><rect width="100" height="100" rx="24" fill="var(--sf)"/><rect x="3" y="3" width="94" height="94" rx="21" fill="none" stroke="var(--ac)" stroke-opacity=".5" stroke-width="1.5"/><path d="M62 24A22 22 0 1 0 62 60A19 19 0 0 1 62 24Z" fill="var(--ac)"/><path d="M72 26l2.2 5.8L80 34l-5.8 2.2L72 42l-2.2-5.8L64 34l5.8-2.2z" fill="var(--ac)"/><path d="M22 70c9-4 19-4 28 1 9-5 19-5 28-1v11c-9-4-19-4-28 1-9-5-19-5-28-1z" fill="var(--ac)" fill-opacity=".92"/><path d="M50 71v11" stroke="var(--sf)" stroke-width="2"/></svg>`;
+const IC={home:'<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/>',jurnal:'<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>',riwayat:'<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>',statistik:'<path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/>',akun:'<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>'};
+const svg=p=>`<svg class="i" viewBox="0 0 24 24">${p}</svg>`;
+const FOOT=()=>`<div class="foot">Crafted with ♥ by Kurniapedia 2026<div>
+<a href="https://instagram.com/kurniapedia" target="_blank" rel="noopener" aria-label="Instagram">${svg('<rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.5 6.5h.01"/>')}</a>
+<a href="https://tiktok.com/@kurniapedia" target="_blank" rel="noopener" aria-label="TikTok">${svg('<path d="M9 12a4 4 0 1 0 4 4V3a5 5 0 0 0 5 5"/>')}</a>
+<a href="https://kurniapedia.my.id/" target="_blank" rel="noopener" aria-label="Kurniapedia">${svg('<circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20z"/>')}</a>
+<a href="https://wa.me/6285870906050" target="_blank" rel="noopener" aria-label="WhatsApp">${svg('<path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/>')}</a></div></div>`;
+
+/* ===== Tampilan ===== */
+function greet(){const h=new Date().getHours();return h<11?'Selamat pagi':h<15?'Selamat siang':h<18?'Selamat sore':'Selamat malam'}
+function dates(){const n=new Date();let h='';try{h=new Intl.DateTimeFormat('id-ID-u-ca-islamic',{day:'numeric',month:'long',year:'numeric'}).format(n)}catch(e){}
+return n.toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'long',year:'numeric'})+(h?'<br>'+esc(h):'')}
+
+function vHome(){const e=ent(today()),sc=score(e),q=quote();
+return `<p class="mu sm">Assalamu'alaikum, ${greet().toLowerCase()}</p><h1>${esc(db.profile.name)}</h1><p class="mu sm">${dates()}</p>
+<div class="card hero"><div class="ring" style="--p:${sc}"><b>${sc}%</b></div><div><div class="mu sm">Capaian hari ini</div><div class="big">${streak()} hari beruntun</div><button class="btn" onclick="go('jurnal',today())">${has(e)?'Lanjutkan jurnal':'Isi jurnal hari ini'}</button></div></div>
+<div class="card quote"><div class="mu sm">Motivasi hari ini</div><p>${esc(q.t)}</p><div class="src">${esc(q.s)}</div></div>
+<div class="card"><div class="mu sm">Renungan untuk malam ini</div><p style="margin-top:4px">${esc(REN[dayIdx()%REN.length])}</p></div>`+FOOT()}
+
+function vJurnal(){const e=cur,g=db.profile.gender,lab=['Belum','Ditunaikan',g==='muslimah'?'Awal waktu':'Berjamaah'];
+const rows=e.uz?'<p class="mu sm" style="padding:8px 0">Sedang uzur syar\'i: sholat dibebaskan dan tidak dihitung. Perbanyak dzikir, doa, dan mendengarkan Al-Qur\'an.</p>':SH.map((n,i)=>`<div class="row"><span>${n}</span><button class="chip s${e.s[i]}" onclick="sh(${i})">${lab[e.s[i]]}</button></div>`).join('');
+return `<h1>Jurnal muhasabah</h1><label class="f">Tanggal<input type="date" value="${date}" max="${today()}" onchange="this.value&&go('jurnal',this.value)"></label>
+<h2>Sholat lima waktu</h2><div class="card" style="margin-top:0">${rows}
+${g==='muslimah'?`<label class="sw"><span>Sedang haid atau nifas</span><input type="checkbox" ${e.uz?'checked':''} onchange="uz(this.checked)"></label>`:''}</div>
+<h2>Amalan hari ini</h2><div class="grid">${AM.map((n,i)=>`<button class="tg ${e.a[i]?'on':''}" onclick="am(${i})">${n}</button>`).join('')}</div>
+<h2>Suasana hati</h2><div class="moods">${MOOD.map((m,i)=>`<button class="${e.m===i+1?'on':''}" onclick="md(${i+1})" aria-label="Suasana ${i+1} dari 5">${m}</button>`).join('')}</div>
+<h2>Refleksi</h2><div class="card" style="margin-top:0">
+<label class="f" style="margin-top:0">Nikmat yang disyukuri<small>Tuliskan tiga hal, sekecil apa pun.</small><textarea oninput="tx('sy',this.value)">${esc(e.sy)}</textarea></label>
+<label class="f">Kekhilafan hari ini<small>Ucapan, sikap, atau kelalaian yang disadari.</small><textarea oninput="tx('kh',this.value)">${esc(e.kh)}</textarea></label>
+<label class="f">Taubat dan perbaikan<small>Apa yang akan kamu lakukan untuk memperbaikinya?</small><textarea oninput="tx('tb',this.value)">${esc(e.tb)}</textarea></label>
+<label class="f">Niat untuk besok<textarea oninput="tx('ni',this.value)">${esc(e.ni)}</textarea></label></div>
+<p style="margin-top:18px;text-align:center"><button class="btn" onclick="toast('Jurnal tersimpan');go('home')">Simpan jurnal</button></p>`+FOOT()}
+
+function vRiwayat(){const ks=Object.keys(db.entries).filter(k=>has(db.entries[k])).sort().reverse();
+return `<h1>Riwayat</h1>`+(ks.length?ks.map(k=>{const e=ent(k),t=e.sy||e.ni||e.tb||e.kh;return `<div class="card item"><div style="min-width:0"><b>${pd(k).toLocaleDateString('id-ID',{weekday:'short',day:'numeric',month:'long',year:'numeric'})}</b> ${e.m?MOOD[e.m-1]:''}<p>${t?esc(t):'Tanpa catatan tulisan'}</p><span class="src">${score(e)}% amalan</span></div><div style="display:flex;flex-direction:column;gap:6px"><button class="btn sm" onclick="go('jurnal','${k}')">Buka</button><button class="btn ghost sm" onclick="del('${k}')">Hapus</button></div></div>`}).join(''):'<div class="card"><p>Belum ada catatan. Mulailah dari jurnal hari ini.</p><p style="margin-top:12px"><button class="btn" onclick="go(\'jurnal\',today())">Isi jurnal</button></p></div>')+FOOT()}
+
+function vStat(){const days=[];for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);days.push(d)}
+const all=Object.keys(db.entries).filter(k=>has(db.entries[k])).map(ent),n=all.length;
+const avg=n?Math.round(all.reduce((a,e)=>a+score(e),0)/n):0;
+const sh=all.filter(e=>!e.uz),shp=sh.length?Math.round(sh.reduce((a,e)=>a+e.s.filter(x=>x).length,0)/(sh.length*5)*100):0;
+const mo=all.filter(e=>e.m),ma=mo.length?(mo.reduce((a,e)=>a+e.m,0)/mo.length).toFixed(1):'-';
+return `<h1>Statistik</h1><div class="card"><div class="mu sm">Capaian 7 hari terakhir</div><div class="bars">${days.map(d=>{const s=has(db.entries[dkey(d)])?score(ent(dkey(d))):0;return `<div title="${s}%"><i style="height:${s}%"></i>${d.toLocaleDateString('id-ID',{weekday:'short'})}</div>`}).join('')}</div></div>
+<div class="stats" style="margin-top:14px"><div class="card"><b>${streak()}</b>hari beruntun</div><div class="card"><b>${n}</b>total catatan</div><div class="card"><b>${avg}%</b>rata-rata amalan</div><div class="card"><b>${shp}%</b>sholat ditunaikan</div></div>
+<div class="card"><div class="mu sm">Rata-rata suasana hati (1–5)</div><div class="big" style="margin:0">${ma}</div></div>`+FOOT()}
+
+function vAkun(){const p=db.profile;
+return `<h1>Pengaturan</h1><div class="card"><label class="f" style="margin-top:0">Nama<input type="text" value="${esc(p.name)}" maxlength="30" oninput="db.profile.name=this.value.trim()||'Sahabat';save()"></label>
+<label class="f">Profil<select onchange="db.profile.gender=this.value;save();applyTheme();render()"><option value="muslim" ${p.gender==='muslim'?'selected':''}>Muslim (tema zamrud-emas)</option><option value="muslimah" ${p.gender==='muslimah'?'selected':''}>Muslimah (tema ungu-rose)</option></select></label></div>
+<div class="card"><b>Data</b><p class="mu sm">Catatan tersimpan di perangkat ini saja. Buat cadangan agar tidak hilang.</p><p style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap"><button class="btn sm" onclick="exp()">Cadangkan</button><button class="btn ghost sm" onclick="$('#imp').click()">Pulihkan</button><button class="btn ghost sm" onclick="rst()">Hapus semua</button></p><input id="imp" type="file" accept="application/json" hidden onchange="imp(this)"></div>
+${dp?'<div class="card"><b>Pasang aplikasi</b><p class="mu sm">Akses cepat dari layar utama, bisa dibuka tanpa internet.</p><p style="margin-top:10px"><button class="btn sm" onclick="inst()">Pasang sekarang</button></p></div>':''}
+<div class="card"><b>Tentang</b><p class="mu sm">Muhasabah membantu menimbang amal setiap hari: ibadah, syukur, kekhilafan, dan niat perbaikan. Semua tulisanmu privat dan tidak dikirim ke server.</p></div>`+FOOT()}
+
+/* ===== Aksi ===== */
+const sh=i=>{cur.s[i]=(cur.s[i]+1)%3;touch();render()};
+const am=i=>{cur.a[i]=cur.a[i]?0:1;touch();render()};
+const md=v=>{cur.m=cur.m===v?0:v;touch();render()};
+const uz=v=>{cur.uz=v?1:0;touch();render()};
+const tx=(k,v)=>{cur[k]=v;touch()};
+function go(t,d){if(d)setDate(d);else if(t==='jurnal')setDate(date);tab=t;render();scrollTo(0,0)}
+function del(k){if(confirm('Hapus catatan tanggal ini?')){delete db.entries[k];save();if(k===date)setDate(k);render();toast('Catatan dihapus')}}
+function exp(){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(db,null,1)],{type:'application/json'}));a.download='muhasabah-cadangan-'+today()+'.json';a.click();toast('Cadangan diunduh')}
+function imp(el){const f=el.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);if(!d.entries||!d.profile)throw 0;if(confirm('Data saat ini akan diganti dengan cadangan ini. Lanjutkan?')){db=d;save();setDate(date);applyTheme();render();toast('Data dipulihkan')}}catch(e){toast('File cadangan tidak valid')}};r.readAsText(f)}
+function rst(){if(confirm('Hapus SEMUA data? Tindakan ini tidak bisa dibatalkan.')){localStorage.removeItem(K);location.reload()}}
+function inst(){dp&&dp.prompt()}
+addEventListener('beforeinstallprompt',e=>{e.preventDefault();dp=e;if(tab==='akun')render()});
+
+const TABS=[['home','Beranda'],['jurnal','Jurnal'],['riwayat','Riwayat'],['statistik','Statistik'],['akun','Akun']];
+const VIEWS={home:vHome,jurnal:vJurnal,riwayat:vRiwayat,statistik:vStat,akun:vAkun};
+function applyTheme(){const g=db.profile&&db.profile.gender||'muslim';document.documentElement.dataset.theme=g;$('meta[name=theme-color]').content=g==='muslimah'?'#251630':'#0B2421'}
+function render(){
+ if(!db.profile){$('#nav').hidden=true;$('#app').innerHTML=`<div class="ob">${LOGO()}<h1 style="margin-top:14px">Selamat datang</h1><p class="mu">Siapa namamu? Pilih profil untuk menyesuaikan tema dan isi jurnal.</p><input type="text" id="nm" placeholder="Nama panggilan" maxlength="30" aria-label="Nama"><div class="pick"><button onclick="start('muslim')">Saya Muslim</button><button onclick="start('muslimah')">Saya Muslimah</button></div></div>`+FOOT();return}
+ $('#nav').hidden=false;
+ $('#nav div').innerHTML=TABS.map(([k,l])=>`<button class="${tab===k?'on':''}" onclick="go('${k}')" ${tab===k?'aria-current="page"':''}>${svg(IC[k==='akun'?'akun':k])}${l}</button>`).join('');
+ $('#app').innerHTML=VIEWS[tab]();
+}
+function start(g){db.profile={name:($('#nm').value||'').trim()||'Sahabat',gender:g};save();applyTheme();render()}
+
+/* ===== Init ===== */
+applyTheme();setDate(today());
+$('#sp').innerHTML=`${LOGO()}<div class="ar" style="margin-top:14px">بِسْمِ ٱللّٰهِ</div><h1>Muhasabah</h1><div class="tg2">Jurnal evaluasi diri harian</div><div class="bar"><i></i></div>${FOOT()}`;
+render();
+setTimeout(()=>{$('#sp').classList.add('out');setTimeout(()=>$('#sp').remove(),700)},2300);
+if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+</script>
+</body>
+</html>

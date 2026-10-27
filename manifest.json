@@ -1,0 +1,16 @@
+{
+  "name": "Muhasabah – Jurnal Harian Muslim & Muslimah",
+  "short_name": "Muhasabah",
+  "description": "Jurnal evaluasi diri harian: ibadah, syukur, taubat, dan motivasi islami.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0B2421",
+  "theme_color": "#0B2421",
+  "lang": "id",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "maskable" }
+  ]
+}
