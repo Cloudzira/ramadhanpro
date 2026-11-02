@@ -18,28 +18,28 @@ function openDatabase() {
         database.createObjectStore(SNAPSHOT_STORE, { keyPath: 'key' });
       }
     };
-    request.onsuccess = () => resolve(request.result);
-    request.onerror = () => reject(request.error || new Error('Gagal membuka penyimpanan lokal.'));
+    request.onsuccess = () => {
+      const database = request.result;
+      // Jika tab lain meminta pembaruan skema, tutup koneksi agar tidak menghalangi.
+      database.onversionchange = () => { database.close(); opening = null; };
+      resolve(database);
+    };
+    request.onerror = () => {
+      opening = null;
+      reject(request.error || new Error('Gagal membuka penyimpanan lokal.'));
+    };
   });
   return opening;
 }
 
-export async function loadSnapshot(key, legacySnapshot) {
-  try {
-    if (legacySnapshot) {
-      await saveSnapshot(key, legacySnapshot);
-      return legacySnapshot;
-    }
-    const database = await openDatabase();
-    const saved = await new Promise((resolve, reject) => {
-      const request = database.transaction(SNAPSHOT_STORE, 'readonly').objectStore(SNAPSHOT_STORE).get(key);
-      request.onsuccess = () => resolve(request.result?.value || null);
-      request.onerror = () => reject(request.error);
-    });
-    return saved;
-  } catch {
-    return legacySnapshot;
-  }
+/** Membaca catatan tersimpan: { key, value, updatedAt } atau null. */
+export async function readSnapshot(key) {
+  const database = await openDatabase();
+  return new Promise((resolve, reject) => {
+    const request = database.transaction(SNAPSHOT_STORE, 'readonly').objectStore(SNAPSHOT_STORE).get(key);
+    request.onsuccess = () => resolve(request.result || null);
+    request.onerror = () => reject(request.error);
+  });
 }
 
 export async function saveSnapshot(key, value) {
@@ -51,4 +51,32 @@ export async function saveSnapshot(key, value) {
     transaction.onerror = () => reject(transaction.error || new Error('Gagal menyimpan data lokal.'));
     transaction.onabort = () => reject(transaction.error || new Error('Penyimpanan lokal dibatalkan.'));
   });
+}
+
+/**
+ * Meminta browser agar tidak menghapus data situs ini secara otomatis saat
+ * penyimpanan perangkat menipis. Mengembalikan true/false, atau null jika tidak didukung.
+ */
+export async function requestPersistence() {
+  try {
+    if (!navigator.storage?.persist) return null;
+    if (await navigator.storage.persisted?.()) return true;
+    return await navigator.storage.persist();
+  } catch {
+    return null;
+  }
+}
+
+/** Status penyimpanan: { persisted: boolean|null, usage: number|null, quota: number|null } */
+export async function storageStatus() {
+  const status = { persisted: null, usage: null, quota: null };
+  try {
+    if (navigator.storage?.persisted) status.persisted = await navigator.storage.persisted();
+    if (navigator.storage?.estimate) {
+      const estimate = await navigator.storage.estimate();
+      status.usage = estimate.usage ?? null;
+      status.quota = estimate.quota ?? null;
+    }
+  } catch { /* biarkan null */ }
+  return status;
 }
