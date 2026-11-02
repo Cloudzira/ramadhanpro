@@ -26,7 +26,10 @@ Folder `dist/` dapat di-host sebagai situs statis, misalnya Cloudflare Pages, Ve
 | --- | --- |
 | `index.html` | Antarmuka, gaya, dan logika aplikasi (satu router event di bagian "EVENT ROUTER") |
 | `src/prayer.js` | Perhitungan jadwal salat dan arah kiblat (Adhan JS) |
-| `src/storage.js` | Penyimpanan IndexedDB |
+| `src/storage.js` | Penyimpanan IndexedDB, permintaan perlindungan penyimpanan, status ruang |
+| `src/backup.js` | Skema data, validasi berkas cadangan, pemilihan data terbaru, pengingat cadangan |
+| `src/dom-patch.js` | Pembaruan tampilan per bagian (ketikan dan fokus tidak hilang) |
+| `tests/` | Tes otomatis (`npm test`) |
 | `vite.config.js` | **Satu-satunya** konfigurasi PWA: manifest dan service worker dibuat otomatis saat build |
 | `public/` | Ikon aplikasi |
 | `docs/` | Contoh tampilan (tidak ikut di-build) |
@@ -49,4 +52,17 @@ Kalender 30 hari mengikuti tanggal awal Ramadhan yang diatur pengguna. Tanggal a
 
 ## Data & cadangan
 
-Data lama di `localStorage` dimigrasikan ke IndexedDB pada perangkat yang mendukungnya. `localStorage` dipertahankan sebagai fallback. Ekspor cadangan sebelum menghapus data browser atau berpindah perangkat. Tidak ada akun, sinkronisasi cloud, analytics, atau backend.
+- **Sumber utama** data adalah IndexedDB. `localStorage` menjadi cermin untuk tampilan pertama dan cadangan. Jika keduanya ada, yang bercap waktu (`updatedAt`) terbaru dipakai.
+- **Skema data** bernomor (`schemaVersion`). Data lama otomatis dimigrasikan; cadangan dari versi yang lebih baru ditolak dengan pesan jelas.
+- **Impor cadangan** divalidasi: tipe data diperiksa dan dibersihkan, entri tidak valid diabaikan, dan pengguna melihat ringkasan isi sebelum memulihkan.
+- **Perlindungan penyimpanan**: aplikasi meminta browser (`navigator.storage.persist()`) agar tidak menghapus data saat memori menipis. Statusnya tampil di Pengaturan.
+- **Pengingat cadangan** muncul di beranda jika ada catatan tetapi cadangan terakhir lebih dari 14 hari (dapat ditunda 3 hari).
+- Ekspor cadangan sebelum menghapus data browser atau berpindah perangkat. Tidak ada akun, sinkronisasi cloud, analytics, atau backend.
+
+## Tes
+
+```sh
+npm test
+```
+
+Tes memakai `node:test` bawaan Node (tanpa paket tambahan) dan dijalankan otomatis sebelum build di GitHub Actions.
