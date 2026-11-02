@@ -1,8 +1,21 @@
 import { CalculationMethod, Coordinates, Madhab, PrayerTimes, Qibla } from 'adhan';
 
+const ADJUSTABLE = ['fajr', 'sunrise', 'dhuhr', 'asr', 'maghrib', 'isha'];
+
 export const CALCULATION_METHODS = {
+  // Kriteria Kemenag RI: Subuh -20°, Isya -18°, ihtiyath +2 menit (Terbit dikurangi 2 menit).
+  kemenag: {
+    label: 'Kemenag RI (Subuh 20°, Isya 18°, ihtiyath +2 menit)',
+    create: () => {
+      const parameters = CalculationMethod.Other();
+      parameters.fajrAngle = 20;
+      parameters.ishaAngle = 18;
+      Object.assign(parameters.adjustments, { fajr: 2, sunrise: -2, dhuhr: 2, asr: 2, maghrib: 2, isha: 2 });
+      return parameters;
+    },
+  },
   indonesia: {
-    label: 'Indonesia / Singapura (Subuh 20°, Isya 18°)',
+    label: 'Singapura / Adhan (Subuh 20°, Isya 18°)',
     create: () => CalculationMethod.Singapore(),
   },
   muslimWorldLeague: {
@@ -47,6 +60,7 @@ export function calculatePrayerSchedule({
   method = 'indonesia',
   madhab = 'shafi',
   imsakOffset = 10,
+  adjustments = {},
   timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone,
 }) {
   const lat = Number(latitude);
@@ -57,6 +71,14 @@ export function calculatePrayerSchedule({
   const selectedMethod = CALCULATION_METHODS[method] || CALCULATION_METHODS.indonesia;
   const parameters = selectedMethod.create();
   parameters.madhab = madhab === 'hanafi' ? Madhab.Hanafi : Madhab.Shafi;
+  // Koreksi manual (menit) ditambahkan di atas koreksi bawaan metode.
+  let manual = false;
+  for (const key of ADJUSTABLE) {
+    const minutes = Math.round(Number(adjustments?.[key]));
+    if (!Number.isFinite(minutes) || minutes === 0) continue;
+    parameters.adjustments[key] = (parameters.adjustments[key] || 0) + Math.max(-30, Math.min(30, minutes));
+    manual = true;
+  }
   const coordinates = new Coordinates(lat, lon);
   const times = new PrayerTimes(coordinates, date, parameters);
   const imsakDate = new Date(times.fajr.getTime() - Math.max(0, Number(imsakOffset) || 0) * 60_000);
@@ -66,6 +88,7 @@ export function calculatePrayerSchedule({
     timezone: timeZone,
     method: selectedMethod.label,
     madhab,
+    manual,
     imsakOffset: Math.max(0, Number(imsakOffset) || 0),
     times: {
       Imsak: formatTime(imsakDate, timeZone),

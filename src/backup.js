@@ -43,6 +43,13 @@ function validTimeZone(value) {
   }
 }
 
+function sanitizeAdjust(value, fallback) {
+  const source = isObject(value) ? value : {};
+  const result = {};
+  for (const key of Object.keys(fallback)) result[key] = clamp(Math.round(number(source[key], fallback[key])), -30, 30);
+  return result;
+}
+
 function sanitizeSettings(raw, defaults) {
   const source = isObject(raw) ? raw : {};
   const result = {};
@@ -56,6 +63,9 @@ function sanitizeSettings(raw, defaults) {
     else if (key === 'madhab') result[key] = value === 'hanafi' ? 'hanafi' : 'shafi';
     else if (key === 'timezone') result[key] = validTimeZone(value) ? value : fallback;
     else if (key === 'imsakOffset') result[key] = clamp(number(value, fallback), 0, 60);
+    else if (key === 'hijriOffset') result[key] = clamp(Math.round(number(value, fallback)), -2, 2);
+    else if (key === 'prayerAdjust') result[key] = sanitizeAdjust(value, fallback);
+    else if (typeof fallback === 'boolean') result[key] = value === true;
     else if (typeof fallback === 'number') result[key] = number(value, fallback) >= 0 ? number(value, fallback) : fallback;
     else if (typeof fallback === 'string') result[key] = text(value, fallback, 200);
     else result[key] = fallback;

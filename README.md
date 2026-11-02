@@ -25,7 +25,9 @@ Folder `dist/` dapat di-host sebagai situs statis, misalnya Cloudflare Pages, Ve
 | Berkas | Fungsi |
 | --- | --- |
 | `index.html` | Antarmuka, gaya, dan logika aplikasi (satu router event di bagian "EVENT ROUTER") |
-| `src/prayer.js` | Perhitungan jadwal salat dan arah kiblat (Adhan JS) |
+| `src/prayer.js` | Perhitungan jadwal salat dan arah kiblat (Adhan JS), preset Kemenag RI, koreksi manual |
+| `src/hijri.js` | Tanggal Hijriah perkiraan (Umm al-Qura) dan perkiraan awal Ramadhan |
+| `src/reminders.js` | Logika pengingat waktu salat (siapa yang jatuh tempo, tanpa duplikat) |
 | `src/storage.js` | Penyimpanan IndexedDB, permintaan perlindungan penyimpanan, status ruang |
 | `src/backup.js` | Skema data, validasi berkas cadangan, pemilihan data terbaru, pengingat cadangan |
 | `src/dom-patch.js` | Pembaruan tampilan per bagian (ketikan dan fokus tidak hilang) |
@@ -46,9 +48,21 @@ Saat dipasang, aplikasi menyediakan pintasan "Mutabaah Harian" dan "Kalender Ram
 
 ## Jadwal salat
 
-Izinkan lokasi perangkat atau isi lintang dan bujur sendiri. RamadhanPro menghitung jadwal di browser menggunakan pustaka open-source Adhan JS, metode yang dipilih, mazhab untuk Ashar, zona waktu, dan offset Imsak. Tidak ada koordinat yang dikirim ke API. Periksa hasil dengan jadwal masjid atau otoritas agama setempat karena metode dan koreksi lokal dapat berbeda.
+Izinkan lokasi perangkat atau pilih kota/isi lintang dan bujur sendiri. RamadhanPro menghitung jadwal di browser dengan pustaka open-source Adhan JS. Tidak ada koordinat yang dikirim ke API.
 
-Kalender 30 hari mengikuti tanggal awal Ramadhan yang diatur pengguna. Tanggal awal dan konversi kalender tidak menetapkan rukyat resmi.
+- **Kemenag RI** (disarankan untuk Indonesia): Subuh 20°, Isya 18°, ihtiyath +2 menit (Terbit dikurangi 2 menit).
+- Metode lain tersedia, termasuk Singapura/Adhan, Karachi (18°/18°), dan Umm al-Qura.
+- **Koreksi manual per waktu** (−30 sampai +30 menit) ditambahkan di atas metode yang dipilih, berguna bila jadwal masjid setempat berbeda beberapa menit.
+
+Periksa hasil dengan jadwal masjid atau Kementerian Agama setempat, karena metode dan koreksi lokal dapat berbeda.
+
+## Tanggal Hijriah
+
+Tanggal Hijriah di header memakai kalender Umm al-Qura bawaan browser sebagai **perkiraan**, dengan koreksi ±2 hari. Awal Ramadhan dan Syawal di Indonesia mengikuti sidang isbat Kemenag atau ketetapan ormas, jadi tombol "Isi perkiraan awal Ramadhan" hanya mengisi tanggal sementara; perbarui setelah penetapan resmi.
+
+## Pengingat waktu salat
+
+Pengingat memakai Notification API dan hanya berbunyi **selama aplikasi terbuka atau berjalan di latar belakang**. Browser dapat menghentikannya saat layar terkunci atau baterai dihemat, dan aplikasi web tidak bisa menggantikan adzan. Untuk jadwal yang andal, tetap gunakan alarm perangkat atau aplikasi adzan.
 
 ## Data & cadangan
 

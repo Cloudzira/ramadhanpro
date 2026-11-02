@@ -7,7 +7,8 @@ const defaults = {
   settings: {
     ramadanStart: '2027-02-08', qadhaOwed: 0, qadhaDone: 0, qadhaDeadline: '2027-02-07', quranGoal: 30, sadaqahGoal: 0,
     zakatFitrah: 45000, nisab: 85000000, tarawihTarget: 30, theme: 'muslim', mode: 'dark', displayName: 'Sahabat', city: '',
-    latitude: null, longitude: null, prayerMethod: 'indonesia', madhab: 'shafi', imsakOffset: 10, timezone: 'Asia/Jakarta',
+    latitude: null, longitude: null, prayerMethod: 'kemenag', madhab: 'shafi', imsakOffset: 10, timezone: 'Asia/Jakarta',
+    prayerAdjust: { fajr: 0, sunrise: 0, dhuhr: 0, asr: 0, maghrib: 0, isha: 0 }, hijriOffset: 0, reminders: false,
   },
   days: {}, fasting: { preRamadan: [], syawal: [] }, prepDone: [], duas: [], family: [], kajian: [], infaq: [],
   card: { recipient: 'Keluarga dan sahabat', sender: '', message: 'Selamat Idulfitri.' },
@@ -136,4 +137,17 @@ test('formatBytes', () => {
   assert.equal(formatBytes(2048), '2.0 KB');
   assert.equal(formatBytes(5 * 1024 * 1024), '5.0 MB');
   assert.equal(formatBytes(null), '–');
+});
+
+test('pengaturan jadwal, Hijriah, dan pengingat dibersihkan saat impor', () => {
+  const raw = valid({ settings: { prayerAdjust: { fajr: 2, isha: 99, dhuhr: 'x', asr: -99, maghrib: 1.6 }, hijriOffset: -9, reminders: 'ya', prayerMethod: 'kemenag' } });
+  const { data } = validateBackup(JSON.stringify(raw), defaults);
+  assert.deepEqual(data.settings.prayerAdjust, { fajr: 2, sunrise: 0, dhuhr: 0, asr: -30, maghrib: 2, isha: 30 });
+  assert.equal(data.settings.hijriOffset, -2);
+  assert.equal(data.settings.reminders, false);
+  assert.equal(data.settings.prayerMethod, 'kemenag');
+  const ok = validateBackup(JSON.stringify(valid({ settings: { reminders: true, hijriOffset: 1 } })), defaults).data.settings;
+  assert.equal(ok.reminders, true);
+  assert.equal(ok.hijriOffset, 1);
+  assert.deepEqual(validateBackup(JSON.stringify(valid()), defaults).data.settings.prayerAdjust, defaults.settings.prayerAdjust);
 });
