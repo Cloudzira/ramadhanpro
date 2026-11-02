@@ -24,7 +24,8 @@ Folder `dist/` dapat di-host sebagai situs statis, misalnya Cloudflare Pages, Ve
 
 | Berkas | Fungsi |
 | --- | --- |
-| `index.html` | Antarmuka, gaya, dan logika aplikasi (satu router event di bagian "EVENT ROUTER") |
+| `index.html` | Antarmuka dan logika aplikasi (satu router event di bagian "EVENT ROUTER") |
+| `src/styles.css` | Seluruh gaya, berlapis dari 1 sampai 6; lapisan akhir menimpa lapisan awal |
 | `src/prayer.js` | Perhitungan jadwal salat dan arah kiblat (Adhan JS), preset Kemenag RI, koreksi manual |
 | `src/hijri.js` | Tanggal Hijriah perkiraan (Umm al-Qura) dan perkiraan awal Ramadhan |
 | `src/reminders.js` | Logika pengingat waktu salat (siapa yang jatuh tempo, tanpa duplikat) |
@@ -37,6 +38,13 @@ Folder `dist/` dapat di-host sebagai situs statis, misalnya Cloudflare Pages, Ve
 | `docs/` | Contoh tampilan (tidak ikut di-build) |
 
 Jangan menambahkan `sw.js` atau `manifest.json` manual di root; keduanya dihasilkan oleh `vite-plugin-pwa`.
+
+## Tampilan dan aksesibilitas
+
+- Tema **Muslim** dan **Muslimah** punya palet aurora, pola latar (garis vs titik), dan aksen berbeda. Setiap tema punya mode gelap dan terang, serta warna per fase (Persiapan, Ramadhan, 10 malam terakhir, Idulfitri, Syawal).
+- Kontras teks dijaga **WCAG AA (≥ 4,5:1)** untuk 20 kombinasi tema × mode × fase, termasuk saat latar aurora paling terang menembus panel kaca. Ini diperiksa otomatis oleh `tests/theme-contrast.test.mjs`. Jika Anda mengubah warna di `src/styles.css` dan tes gagal, pesan error menyebut warna dan rasio kontrasnya.
+- Peramban tanpa `backdrop-filter`, atau pengguna yang memilih "kurangi transparansi", mendapat permukaan solid. Mode kontras tinggi, warna paksa, dan "kurangi gerakan" juga didukung.
+- Warna bilah status browser (`theme-color`) mengikuti tema dan mode.
 
 ## Menambah interaksi baru
 
