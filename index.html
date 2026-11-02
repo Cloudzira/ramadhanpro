@@ -9,13 +9,15 @@
   <link rel="icon" href="%BASE_URL%icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="%BASE_URL%apple-touch-icon.png">
   <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="RamadhanPro">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="RamadhanPro">
   <meta property="og:title" content="RamadhanPro — Pendamping Ibadah">
   <meta property="og:description" content="Jadwal shalat, mutabaah, kalender Ramadhan, zakat, dan doa — privat, gratis, bisa offline.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    :root{color-scheme:dark;--bg:#101b19;--surface:#182724;--surface-2:#20332f;--line:#30433e;--text:#f1f3eb;--muted:#a4b2aa;--accent:#d8b66c;--accent-soft:rgba(216,182,108,.14);--accent-ink:#201a0d;--good:#87c7a6;--danger:#ed998e;--radius:8px;--serif:Georgia,serif;--sans:'Inter',sans-serif;--display:'Sora',sans-serif}
+    :root{color-scheme:dark;--bg:#101b19;--surface:#182724;--surface-2:#20332f;--line:#30433e;--text:#f1f3eb;--muted:#a4b2aa;--accent:#d8b66c;--accent-soft:rgba(216,182,108,.14);--accent-ink:#201a0d;--good:#87c7a6;--danger:#ed998e;--radius:8px;--serif:Georgia,serif;--sans:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;--display:'Sora','Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif}
     [data-phase="ramadan"]{--accent:#7fd2c2;--accent-soft:rgba(127,210,194,.13);--good:#9ed8bb}
     [data-phase="last"]{--bg:#101820;--surface:#19242c;--surface-2:#242f37;--accent:#c0e8d0;--accent-soft:rgba(192,232,208,.12);--good:#d1df99}
     [data-phase="eid"]{--bg:#211b16;--surface:#2a231c;--surface-2:#393027;--accent:#efbb78;--accent-soft:rgba(239,187,120,.14);--good:#b5d7a4}
@@ -224,6 +226,15 @@
   <script type="module">
     'use strict';
     const KEY='ramadhanpro-v1';
+    import '@fontsource/inter/latin-400.css';
+    import '@fontsource/inter/latin-500.css';
+    import '@fontsource/inter/latin-600.css';
+    import '@fontsource/inter/latin-700.css';
+    import '@fontsource/sora/latin-400.css';
+    import '@fontsource/sora/latin-500.css';
+    import '@fontsource/sora/latin-600.css';
+    import '@fontsource/sora/latin-700.css';
+    import '@fontsource/sora/latin-800.css';
     import { calculatePrayerSchedule, CALCULATION_METHODS } from './src/prayer.js';
     import { loadSnapshot, saveSnapshot } from './src/storage.js';
     const NAV=[['home',`<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>`,'Beranda'],['calendar',`<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="17" rx="3"/><path d="M8 2v4M16 2v4M3 10h18"/></svg>`,'Kalender'],['daily',`<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><path d="M8.5 12.5l2.5 2.5 4.5-5"/></svg>`,'Mutabaah'],['plan',`<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>`,'Rencana'],['report',`<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-8M22 20H2"/></svg>`,'Rapor'],['settings',`<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h9M17 6h3M4 12h3M11 12h9M4 18h11M19 18h1"/><circle cx="15" cy="6" r="2"/><circle cx="9" cy="12" r="2"/><circle cx="17" cy="18" r="2"/></svg>`,'Akun']];
@@ -279,25 +290,177 @@
     function monthProgress(){const start=db.settings.ramadanStart;let n=0,all=0;for(let i=0;i<30;i++){const k=keyPlus(start,i);if(k>keyOf(new Date()))break;all++;if(db.days[k]&&(todayScore(db.days[k])>0||db.days[k].note))n++}return all?Math.round(n/all*100):0}
     function keyPlus(k,n){const d=new Date(`${k}T12:00:00`);d.setDate(d.getDate()+n);return keyOf(d)}
     function report(){const days=Object.entries(db.days).filter(([,r])=>r.prayers.some(Boolean)||r.pages||r.note||Object.values(r.tasks).some(Boolean));const scores=days.map(([,r])=>todayScore(r)),avg=scores.length?Math.round(scores.reduce((a,b)=>a+b,0)/scores.length):0;const daily=Array.from({length:7},(_,i)=>{const d=new Date();d.setDate(d.getDate()-(6-i));const k=keyOf(d);return{label:d.toLocaleDateString('id-ID',{weekday:'short'}),score:db.days[k]?todayScore(db.days[k]):0}});const pages=days.reduce((a,[,r])=>a+(Number(r.pages)||0),0),sad=days.reduce((a,[,r])=>a+(Number(r.sadaqah)||0),0);const phase=phaseInfo();document.documentElement.dataset.phase=phase.key;return shellPage('Rapor spiritual','Lihat perjalananmu',`<div class="grid"><section class="panel span-4"><div class="eyebrow">Hari tercatat</div><div class="stat-line"><strong>${days.length}</strong><span>hari jurnal</span></div></section><section class="panel span-4"><div class="eyebrow">Rata-rata checklist</div><div class="stat-line"><strong>${avg}%</strong><span>dari jurnal tercatat</span></div></section><section class="panel span-4"><div class="eyebrow">Streak saat ini</div><div class="stat-line"><strong>${streak()}</strong><span>hari beruntun</span></div></section><section class="panel span-8"><div class="panel-head"><h2>Mutabaah 7 hari terakhir</h2><span class="pill">Persentase per hari</span></div><div class="chart">${daily.map(d=>`<div class="chart-col"><b>${d.score}%</b><i style="height:${d.score}%"></i><span>${d.label}</span></div>`).join('')}</div></section><section class="panel span-4"><div class="panel-head"><h2>Akumulasi</h2></div><div class="list-row"><p>Halaman Qur’an</p><strong>${pages}</strong></div><div class="list-row"><p>Sedekah (Rp)</p><strong>${sad.toLocaleString('id-ID')}</strong></div><div class="list-row"><p>Puasa Syawal</p><strong>${db.fasting.syawal.length}/6</strong></div></section><section class="panel span-12"><div class="eyebrow">Refleksi</div><h2>Progres bukan perlombaan.</h2><p class="muted small">Angka di atas hanya ringkasan catatan pribadimu, bukan penilaian kualitas iman atau ibadah. Simpan laporan dengan aman dan tinjau sesuai tujuanmu.</p><button class="btn" data-action="export">Unduh cadangan data</button></section></div>`)}
-    function settings(){const p=phaseInfo();document.documentElement.dataset.phase=p.key;let schedule='Jadwal belum dimuat.';try{const saved=JSON.parse(localStorage.getItem('rp-prayer-cache')||'null');if(saved)schedule=`Imsak ${saved.Imsak} · Subuh ${saved.Fajr} · Dzuhur ${saved.Dhuhr} · Ashar ${saved.Asr} · Maghrib ${saved.Maghrib} · Isya ${saved.Isha}\nTanggal ${saved.date||''}. Jadwal dapat berubah; periksa kembali ke sumber setempat.`}catch{}return shellPage('Pengaturan & privasi','Kendali tetap di tanganmu',`<div class="grid"><section class="panel span-7"><div class="panel-head"><h2>Profil dan tanggal</h2></div><div class="form-grid"><label class="field"><span>Nama panggilan</span><input type="text" data-setting="displayName" maxlength="40" value="${esc(db.settings.displayName)}"></label><label class="field"><span>Awal Ramadhan perkiraan</span><input type="date" data-setting="ramadanStart" value="${db.settings.ramadanStart}"></label><label class="field"><span>Nama kota (opsional)</span><input type="text" data-setting="city" value="${esc(db.settings.city)}" placeholder="Untuk label jadwal"></label></div></section><section class="panel span-5"><div class="panel-head"><h2>Jadwal shalat</h2></div><p class="muted small">Ambil jadwal sesuai lokasi melalui layanan AlAdhan. Lokasi hanya digunakan saat kamu menekan tombol dan tidak disimpan oleh RamadhanPro.</p><button class="btn" data-action="location">Gunakan lokasi saat ini</button><div id="prayer-times" class="small muted" style="margin-top:12px;white-space:pre-line">${esc(schedule)}</div></section><section class="panel span-12"><div class="panel-head"><h2>Privasi dan cadangan</h2><span class="pill">Penyimpanan lokal</span></div><p class="muted small">Jurnal dan progres tersimpan di penyimpanan browser perangkat ini. Tidak ada akun, sinkronisasi cloud, atau pengiriman catatan ibadah. Menghapus data browser dapat menghapus catatan.</p><div class="row-actions"><button class="btn primary" data-action="export">Unduh cadangan JSON</button><button class="btn" data-action="import">Pulihkan cadangan</button><button class="btn quiet danger" data-action="reset">Hapus semua data</button><input type="file" id="import-file" accept="application/json" hidden></div></section><section class="panel span-12"><div class="panel-head"><h2>Pengingat</h2></div><p class="muted small">Pengingat waktu shalat dan notifikasi latar belum aktif. Gunakan alarm perangkat atau aplikasi jadwal shalat lokal agar tetap berfungsi saat offline.</p><button class="btn" data-action="notify-test">Minta izin notifikasi browser</button></section></div>`)}
-    function render(){const p=phaseInfo(),theme=db.settings.theme==='muslimah'?'muslimah':'muslim',mode=db.settings.mode==='light'?'light':'dark';document.documentElement.dataset.phase=p.key;document.documentElement.dataset.theme=theme;document.documentElement.dataset.mode=mode;document.querySelector('meta[name="theme-color"]').content=mode==='light'?(theme==='muslimah'?'#eef2f7':'#eef2f7'):(theme==='muslimah'?'#070b14':'#070b14');document.getElementById('profile-name').textContent=db.settings.displayName||'Sahabat';document.getElementById('side-nav').innerHTML=navHTML();document.getElementById('mobile-nav').innerHTML=navHTML();const views={home,calendar,daily,plan,report,settings};document.getElementById('main').innerHTML=views[view]()+footerHTML();if(view==='settings')document.getElementById('prayer-times')?.closest('.panel')?.remove();}
+    function settings(){const p=phaseInfo();document.documentElement.dataset.phase=p.key;return shellPage('Pengaturan & privasi','Kendali tetap di tanganmu',`<div class="grid"><section class="panel span-7"><div class="panel-head"><h2>Profil dan tanggal</h2></div><div class="form-grid"><label class="field"><span>Nama panggilan</span><input type="text" data-setting="displayName" maxlength="40" value="${esc(db.settings.displayName)}"></label><label class="field"><span>Awal Ramadhan perkiraan</span><input type="date" data-setting="ramadanStart" value="${db.settings.ramadanStart}"></label><label class="field"><span>Nama kota (opsional)</span><input type="text" data-setting="city" value="${esc(db.settings.city)}" placeholder="Untuk label jadwal"></label></div></section><section class="panel span-12"><div class="panel-head"><h2>Privasi dan cadangan</h2><span class="pill">Penyimpanan lokal</span></div><p class="muted small">Jurnal dan progres tersimpan di penyimpanan browser perangkat ini. Tidak ada akun, sinkronisasi cloud, atau pengiriman catatan ibadah. Menghapus data browser dapat menghapus catatan.</p><div class="row-actions"><button class="btn primary" data-action="export">Unduh cadangan JSON</button><button class="btn" data-action="import">Pulihkan cadangan</button><button class="btn quiet danger" data-action="reset">Hapus semua data</button><input type="file" id="import-file" accept="application/json" hidden></div></section><section class="panel span-12"><div class="panel-head"><h2>Pengingat</h2></div><p class="muted small">Pengingat waktu shalat dan notifikasi latar belum aktif. Gunakan alarm perangkat atau aplikasi jadwal shalat lokal agar tetap berfungsi saat offline.</p><button class="btn" data-action="notify-test">Minta izin notifikasi browser</button></section></div>`)}
+    function render(){const p=phaseInfo(),theme=db.settings.theme==='muslimah'?'muslimah':'muslim',mode=db.settings.mode==='light'?'light':'dark';document.documentElement.dataset.phase=p.key;document.documentElement.dataset.theme=theme;document.documentElement.dataset.mode=mode;document.querySelector('meta[name="theme-color"]').content=mode==='light'?(theme==='muslimah'?'#eef2f7':'#eef2f7'):(theme==='muslimah'?'#070b14':'#070b14');document.getElementById('profile-name').textContent=db.settings.displayName||'Sahabat';document.getElementById('side-nav').innerHTML=navHTML();document.getElementById('mobile-nav').innerHTML=navHTML();const views={home,calendar,daily,plan,report,settings};document.getElementById('main').innerHTML=views[view]()+footerHTML();}
     function notify(message){const el=document.getElementById('toast');el.textContent=message;el.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove('show'),2500)}
     function update(mutator){mutator();save();render()}
     function exportData(){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(db,null,2)],{type:'application/json'}));a.download=`ramadhanpro-cadangan-${keyOf(new Date())}.json`;a.click();URL.revokeObjectURL(a.href);notify('Cadangan berhasil diunduh')}
     function addFast(kind,date){if(!date)return;if(db.fasting[kind].includes(date)){notify('Tanggal itu sudah tercatat');return}if(kind==='syawal'&&db.fasting.syawal.length>=6){notify('Target enam hari Syawal sudah tercatat');return}db.fasting[kind].push(date);db.fasting[kind].sort();save();render();notify('Tanggal puasa dicatat')}
     function locatePrayer(){if(!navigator.geolocation){notify('Browser ini tidak menyediakan akses lokasi');return}notify('Meminta izin lokasi…');navigator.geolocation.getCurrentPosition(position=>{db.settings.latitude=Number(position.coords.latitude.toFixed(6));db.settings.longitude=Number(position.coords.longitude.toFixed(6));save();render();notify('Lokasi tersimpan di perangkat')},()=>notify('Izin lokasi tidak diberikan. Masukkan koordinat secara manual.'))}
-    document.addEventListener('click',async e=>{const target=e.target.closest('button');if(!target)return;if(target.dataset.view){view=target.dataset.view;render();window.scrollTo(0,0);return}const a=target.dataset.action;if(!a)return;const r=dayRecord();if(a==='prayer')update(()=>{const i=Number(target.dataset.value);r.prayers[i]=!r.prayers[i]});else if(a==='water')update(()=>{const i=Number(target.dataset.value);r.water[i]=!r.water[i]});else if(a==='pages-step')update(()=>r.pages=Math.max(0,(Number(r.pages)||0)+Number(target.dataset.value)));else if(a==='fast-date'){addFast('preRamadan',document.querySelector('[data-action="fast-date"]').value)}else if(a==='fast-remove')update(()=>db.fasting[target.dataset.kind]=db.fasting[target.dataset.kind].filter(d=>d!==target.dataset.date));else if(a==='prep')update(()=>{const i=Number(target.dataset.value);db.prepDone=db.prepDone.includes(i)?db.prepDone.filter(v=>v!==i):[...db.prepDone,i]});else if(a==='iktikaf')update(()=>db.iktikaf=!db.iktikaf);else if(a==='night')update(()=>{db.iktikafDays||=[];const n=Number(target.dataset.value);db.iktikafDays=db.iktikafDays.includes(n)?db.iktikafDays.filter(d=>d!==n):[...db.iktikafDays,n]});else if(a==='dua-add'){const input=document.getElementById('dua-input'),value=input.value.trim();if(value)update(()=>db.duas.push(value));else notify('Tulis doa terlebih dahulu')}else if(a==='dua-delete')update(()=>db.duas.splice(Number(target.dataset.value),1));else if(a==='family-add'){const input=document.getElementById('family-input'),name=input.value.trim();if(name)update(()=>db.family.push({name,done:false}));else notify('Tulis nama terlebih dahulu')}else if(a==='family-delete')update(()=>db.family.splice(Number(target.dataset.value),1));else if(a==='copy-greeting'){const name=document.getElementById('greet-name').value.trim(),text=`${name?`Untuk ${name}, `:''}Selamat Idulfitri. Mohon maaf lahir dan batin. Semoga Allah menerima amal ibadah kita.`;try{await navigator.clipboard.writeText(text);notify('Ucapan disalin')}catch{notify(text)}}else if(a==='takbir'){const text='Allahu akbar, Allahu akbar, la ilaha illallah, wallahu akbar. Allahu akbar wa lillahil hamd.';if('speechSynthesis'in window){speechSynthesis.cancel();speechSynthesis.speak(new SpeechSynthesisUtterance(text))}else notify('Pembaca suara tidak tersedia')}else if(a==='gentle')notify('Pilih satu amal kecil, tarik napas, dan beri tubuh waktu untuk beristirahat.');else if(a==='export')exportData();else if(a==='import')document.getElementById('import-file').click();else if(a==='reset'){if(confirm('Hapus seluruh catatan RamadhanPro dari perangkat ini? Tindakan ini tidak dapat dibatalkan.')){localStorage.removeItem(KEY);db=structuredClone(defaults);save();render();notify('Data dihapus')}}else if(a==='location')prayerTimes();else if(a==='install'){if(window.installPrompt){window.installPrompt.prompt();window.installPrompt=null}else notify('Gunakan menu browser “Tambahkan ke layar utama”')}else if(a==='notify-test'){if(!('Notification'in window))notify('Notifikasi tidak didukung browser');else{const permission=await Notification.requestPermission();notify(permission==='granted'?'Izin notifikasi aktif. Pengingat terjadwal belum disiapkan.':'Izin notifikasi tidak diberikan')}}});
-    document.addEventListener('change',e=>{const el=e.target,a=el.dataset.action;if(a==='prayer'||a==='task'||a==='fast'||a==='habit'||a==='prep'||a==='water'){const checked=el.checked;update(()=>{const i=Number(el.dataset.value);if(a==='prayer')dayRecord().prayers[i]=checked;else if(a==='task')dayRecord().tasks[i]=checked;else if(a==='fast')dayRecord().fast=checked;else if(a==='water')dayRecord().water[i]=checked;else if(a==='prep')db.prepDone=db.prepDone.includes(i)?db.prepDone.filter(x=>x!==i):[...db.prepDone,i];else db.habits[`${keyOf(new Date())}-${i}`]=checked})}else if(a==='date'){selectedDate=el.value;render()}else if(a==='mood')update(()=>dayRecord().mood=Number(el.value));else if(a==='pages')update(()=>dayRecord().pages=Math.max(0,Number(el.value)||0));else if(a==='juz')update(()=>dayRecord().juz=Math.max(0,Math.min(30,Number(el.value)||0)));else if(a==='sadaqah')update(()=>dayRecord().sadaqah=Math.max(0,Number(el.value)||0));else if(a==='fast-date')addFast(phaseInfo().key==='prep'?'preRamadan':'syawal',el.value);else if(a==='family-check')update(()=>db.family[Number(el.dataset.value)].done=el.checked);else if(a==='note')update(()=>dayRecord().note=el.value);else if(a==='pages-step'){}else if(el.dataset.setting)update(()=>{const key=el.dataset.setting,textFields=['displayName','city','ramadanStart','qadhaDeadline','theme'].includes(key),value=textFields?el.value:el.value===''?0:Number(el.value);db.settings[key]=value;render()})});
-    document.addEventListener('input',e=>{const el=e.target,a=el.dataset.action;if(a==='note'){dayRecord().note=el.value;save()}else if(el.dataset.setting&&['displayName','city'].includes(el.dataset.setting)){db.settings[el.dataset.setting]=el.value;save();document.getElementById('profile-name').textContent=el.value||'Sahabat'}});
-    document.addEventListener('change',e=>{if(e.target.id==='import-file'){const file=e.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=()=>{try{const data=JSON.parse(reader.result);if(!data.settings||!data.days)throw Error();if(confirm('Pulihkan cadangan dan ganti data saat ini?')){db=mergeSnapshot(data);save();render();notify('Cadangan berhasil dipulihkan')}}catch{notify('File cadangan tidak valid')}e.target.value=''};reader.readAsText(file)}});
-    document.addEventListener('click',e=>{const button=e.target.closest('button'),action=button?.dataset.action;if(!action)return;if(action==='tarawih-night'){const date=keyPlus(db.settings.ramadanStart,Number(button.dataset.value)-1);update(()=>{const record=dayRecord(date);record.tasks[2]=!record.tasks[2]})}else if(action==='kajian-add'){const title=document.getElementById('kajian-title').value.trim(),date=document.getElementById('kajian-date').value,note=document.getElementById('kajian-note').value.trim();if(!title||!note){notify('Isi judul dan ringkasan kajian terlebih dahulu');return}update(()=>db.kajian.push({id:`k-${Date.now().toString(36)}`,title,date:date||keyOf(new Date()),note}))}else if(action==='kajian-delete')update(()=>db.kajian=db.kajian.filter(item=>item.id!==button.dataset.value));else if(action==='infaq-add'){const amount=Number(document.getElementById('infaq-amount').value),date=document.getElementById('infaq-date').value,purpose=document.getElementById('infaq-purpose').value.trim();if(!Number.isFinite(amount)||amount<=0){notify('Masukkan nominal infaq yang valid');return}update(()=>db.infaq.push({id:`i-${Date.now().toString(36)}`,amount,date:date||keyOf(new Date()),purpose}))}else if(action==='infaq-delete')update(()=>db.infaq=db.infaq.filter(item=>item.id!==button.dataset.value));else if(action==='download-card')downloadCard()});
-    document.addEventListener('change',e=>{if(e.target.dataset.action==='zakat-paid')update(()=>db.zakatFitrahPaid=e.target.checked)});
-    document.addEventListener('input',e=>{const field=e.target.dataset.cardField;if(!field)return;db.card[field]=e.target.value;save();const preview=document.getElementById(`card-preview-${field}`);if(preview)preview.textContent=e.target.value||(field==='sender'?db.settings.displayName:'')});
+    /* ==================================================================
+       EVENT ROUTER — satu pintu untuk semua interaksi (klik, ubah, input).
+       Fitur baru cukup menambah satu entri di CLICK_ACTIONS, tanpa
+       listener baru dan tanpa stopImmediatePropagation.
+       ================================================================== */
+    const CLICK_ACTIONS={
+      prayer(t){const i=Number(t.dataset.value);update(()=>{const r=dayRecord();r.prayers[i]=!r.prayers[i]})},
+      water(t){const i=Number(t.dataset.value);update(()=>{const r=dayRecord();r.water[i]=!r.water[i]})},
+      'pages-step'(t){update(()=>{const r=dayRecord();r.pages=Math.max(0,(Number(r.pages)||0)+Number(t.dataset.value))})},
+      'fast-date'(){addFast('preRamadan',document.querySelector('[data-action="fast-date"]').value)},
+      'fast-remove'(t){update(()=>db.fasting[t.dataset.kind]=db.fasting[t.dataset.kind].filter(d=>d!==t.dataset.date))},
+      prep(t){update(()=>{const i=Number(t.dataset.value);db.prepDone=db.prepDone.includes(i)?db.prepDone.filter(v=>v!==i):[...db.prepDone,i]})},
+      iktikaf(){update(()=>db.iktikaf=!db.iktikaf)},
+      night(t){update(()=>{db.iktikafDays||=[];const n=Number(t.dataset.value);db.iktikafDays=db.iktikafDays.includes(n)?db.iktikafDays.filter(d=>d!==n):[...db.iktikafDays,n]})},
+      'dua-add'(){const value=document.getElementById('dua-input').value.trim();if(value)update(()=>db.duas.push(value));else notify('Tulis doa terlebih dahulu')},
+      'dua-delete'(t){update(()=>db.duas.splice(Number(t.dataset.value),1))},
+      'family-add'(){const name=document.getElementById('family-input').value.trim();if(name)update(()=>db.family.push({name,done:false}));else notify('Tulis nama terlebih dahulu')},
+      'family-delete'(t){update(()=>db.family.splice(Number(t.dataset.value),1))},
+      async 'copy-greeting'(){const name=document.getElementById('greet-name').value.trim(),text=`${name?`Untuk ${name}, `:''}Selamat Idulfitri. Mohon maaf lahir dan batin. Semoga Allah menerima amal ibadah kita.`;try{await navigator.clipboard.writeText(text);notify('Ucapan disalin')}catch{notify(text)}},
+      takbir(){const text='Allahu akbar, Allahu akbar, la ilaha illallah, wallahu akbar. Allahu akbar wa lillahil hamd.';if('speechSynthesis'in window){speechSynthesis.cancel();speechSynthesis.speak(new SpeechSynthesisUtterance(text))}else notify('Pembaca suara tidak tersedia')},
+      gentle(){notify('Pilih satu amal kecil, tarik napas, dan beri tubuh waktu untuk beristirahat.')},
+      'export'(){exportData()},
+      'import'(){document.getElementById('import-file').click()},
+      'reset'(){if(confirm('Hapus seluruh catatan RamadhanPro dari perangkat ini? Tindakan ini tidak dapat dibatalkan.')){localStorage.removeItem(KEY);db=structuredClone(defaults);save();render();notify('Data dihapus')}},
+      install(){if(window.installPrompt){window.installPrompt.prompt();window.installPrompt=null}else notify('Gunakan menu browser “Tambahkan ke layar utama”')},
+      async 'notify-test'(){if(!('Notification'in window)){notify('Notifikasi tidak didukung browser');return}const permission=await Notification.requestPermission();notify(permission==='granted'?'Izin notifikasi aktif. Pengingat terjadwal belum disiapkan.':'Izin notifikasi tidak diberikan')},
+      'tarawih-night'(t){const date=keyPlus(db.settings.ramadanStart,Number(t.dataset.value)-1);update(()=>{const record=dayRecord(date);record.tasks[2]=!record.tasks[2]})},
+      'kajian-add'(){const title=document.getElementById('kajian-title').value.trim(),date=document.getElementById('kajian-date').value,note=document.getElementById('kajian-note').value.trim();if(!title||!note){notify('Isi judul dan ringkasan kajian terlebih dahulu');return}update(()=>db.kajian.push({id:`k-${Date.now().toString(36)}`,title,date:date||keyOf(new Date()),note}))},
+      'kajian-delete'(t){update(()=>db.kajian=db.kajian.filter(item=>item.id!==t.dataset.value))},
+      'infaq-add'(){const amount=Number(document.getElementById('infaq-amount').value),date=document.getElementById('infaq-date').value,purpose=document.getElementById('infaq-purpose').value.trim();if(!Number.isFinite(amount)||amount<=0){notify('Masukkan nominal infaq yang valid');return}update(()=>db.infaq.push({id:`i-${Date.now().toString(36)}`,amount,date:date||keyOf(new Date()),purpose}))},
+      'infaq-delete'(t){update(()=>db.infaq=db.infaq.filter(item=>item.id!==t.dataset.value))},
+      'download-card'(){downloadCard()},
+    };
+
+    /* Aksi yang boleh dipicu oleh elemen apa pun (bukan hanya <button>) */
+    const PRAYER_CLICK_SELECTOR='[data-action="calendar-select"],[data-action="calendar-open"],[data-action="locate-prayer"],[data-action="calculate-prayer"]';
+    function handlePrayerClick(el){
+      const a=el.dataset.action;
+      if(a==='calendar-select'){selectedDate=el.dataset.date;render()}
+      else if(a==='calendar-open'){selectedDate=el.dataset.date;view='daily';render()}
+      else if(a==='locate-prayer')locatePrayer();
+      else if(a==='calculate-prayer'){const result=prayerSchedule();if(result)notify(`Jadwal dihitung dengan ${result.method}`);else notify('Lengkapi koordinat dan zona waktu yang valid.');render()}
+    }
+
+    async function handleButtonClick(e){
+      const button=e.target.closest('button');
+      if(!button)return;
+      if(button.dataset.view){view=button.dataset.view;render();window.scrollTo(0,0);return}
+      const handler=CLICK_ACTIONS[button.dataset.action];
+      if(handler)await handler(button,e);
+    }
+
+    function handleDialogClick(e){
+      const target=e.target;
+      const close=target.closest('[data-close-dialog]');
+      if(close){close.closest('dialog')?.close();return}
+      const trigger=target.closest('[data-dialog]');
+      if(trigger)document.getElementById(trigger.dataset.dialog)?.showModal();
+      const tab=target.closest('[data-tab]');
+      if(tab){
+        const dialog=tab.closest('dialog');
+        dialog.querySelectorAll('[data-tab]').forEach(b=>b.classList.toggle('on',b===tab));
+        dialog.querySelectorAll('[data-pane]').forEach(x=>x.hidden=x.dataset.pane!==tab.dataset.tab);
+        return;
+      }
+      if(target.matches('dialog.help-dialog,dialog.app-dialog'))target.close();
+    }
+
+    async function onClick(e){
+      const choice=e.target.closest('[data-theme-choice],[data-mode-choice]');
+      if(choice){
+        if(choice.dataset.themeChoice)db.settings.theme=choice.dataset.themeChoice;
+        if(choice.dataset.modeChoice)db.settings.mode=choice.dataset.modeChoice;
+        save();render();return;
+      }
+      const prayerEl=e.target.closest(PRAYER_CLICK_SELECTOR);
+      if(prayerEl){handlePrayerClick(prayerEl);return}
+      await handleButtonClick(e);
+      handleDialogClick(e);
+    }
+
+    function importBackup(input){
+      const file=input.files[0];
+      if(!file)return;
+      const reader=new FileReader();
+      reader.onload=()=>{
+        try{
+          const data=JSON.parse(reader.result);
+          if(!data.settings||!data.days)throw Error();
+          if(confirm('Pulihkan cadangan dan ganti data saat ini?')){db=mergeSnapshot(data);save();render();notify('Cadangan berhasil dipulihkan')}
+        }catch{notify('File cadangan tidak valid')}
+        input.value='';
+      };
+      reader.readAsText(file);
+    }
+
+    function onChange(e){
+      const el=e.target,a=el.dataset.action;
+
+      const cityPick=el.closest('[data-city-pick]');
+      if(cityPick&&cityPick.value!==''){
+        const c=CITIES[Number(cityPick.value)];
+        if(!c)return;
+        Object.assign(db.settings,{city:c[0],latitude:c[1],longitude:c[2],timezone:c[3]});
+        if(c[4])db.settings.prayerMethod=c[4];
+        save();render();notify(`Lokasi diatur ke ${c[0]}`);return;
+      }
+
+      const prayerField=el.closest('[data-prayer-setting]');
+      if(prayerField){
+        const key=prayerField.dataset.prayerSetting,value=['latitude','longitude','imsakOffset'].includes(key)?(prayerField.value===''?null:Number(prayerField.value)):prayerField.value;
+        db.settings[key]=value;save();render();return;
+      }
+
+      if(a==='fast-date'&&el.closest('#syawal-tracker')){addFast('syawal',el.value);return}
+      if(el.id==='import-file'){importBackup(el);return}
+      if(a==='zakat-paid'){update(()=>db.zakatFitrahPaid=el.checked);return}
+
+      if(a==='prayer'||a==='task'||a==='fast'||a==='habit'||a==='prep'||a==='water'){
+        const checked=el.checked;
+        update(()=>{
+          const i=Number(el.dataset.value);
+          if(a==='prayer')dayRecord().prayers[i]=checked;
+          else if(a==='task')dayRecord().tasks[i]=checked;
+          else if(a==='fast')dayRecord().fast=checked;
+          else if(a==='water')dayRecord().water[i]=checked;
+          else if(a==='prep')db.prepDone=db.prepDone.includes(i)?db.prepDone.filter(x=>x!==i):[...db.prepDone,i];
+          else db.habits[`${keyOf(new Date())}-${i}`]=checked;
+        });
+      }
+      else if(a==='date'){selectedDate=el.value;render()}
+      else if(a==='mood')update(()=>dayRecord().mood=Number(el.value));
+      else if(a==='pages')update(()=>dayRecord().pages=Math.max(0,Number(el.value)||0));
+      else if(a==='juz')update(()=>dayRecord().juz=Math.max(0,Math.min(30,Number(el.value)||0)));
+      else if(a==='sadaqah')update(()=>dayRecord().sadaqah=Math.max(0,Number(el.value)||0));
+      else if(a==='fast-date')addFast(phaseInfo().key==='prep'?'preRamadan':'syawal',el.value);
+      else if(a==='family-check')update(()=>db.family[Number(el.dataset.value)].done=el.checked);
+      else if(a==='note')update(()=>dayRecord().note=el.value);
+      else if(a==='pages-step'){}
+      else if(el.dataset.setting)update(()=>{
+        const key=el.dataset.setting,textFields=['displayName','city','ramadanStart','qadhaDeadline','theme'].includes(key),value=textFields?el.value:el.value===''?0:Number(el.value);
+        db.settings[key]=value;render();
+      });
+    }
+
+    function onInput(e){
+      const el=e.target,a=el.dataset.action;
+      if(a==='note'){dayRecord().note=el.value;save()}
+      else if(el.dataset.setting&&['displayName','city'].includes(el.dataset.setting)){
+        db.settings[el.dataset.setting]=el.value;save();
+        document.getElementById('profile-name').textContent=el.value||'Sahabat';
+      }
+      const field=el.dataset.cardField;
+      if(field){
+        db.card[field]=el.value;save();
+        const preview=document.getElementById(`card-preview-${field}`);
+        if(preview)preview.textContent=el.value||(field==='sender'?db.settings.displayName:'');
+      }
+    }
+
+    document.addEventListener('click',onClick);
+    document.addEventListener('change',onChange);
+    document.addEventListener('input',onInput);
     function downloadCard(){const card=db.card,canvas=document.createElement('canvas');canvas.width=1200;canvas.height=750;const context=canvas.getContext('2d'),background=context.createLinearGradient(0,0,1200,750);background.addColorStop(0,'#142d27');background.addColorStop(.58,'#294235');background.addColorStop(1,'#503a24');context.fillStyle=background;context.fillRect(0,0,1200,750);context.strokeStyle='rgba(239,187,120,.45)';context.lineWidth=2;for(const [x,y,r] of [[85,90,220],[1110,690,260]]){context.beginPath();context.arc(x,y,r,0,Math.PI*2);context.stroke();context.beginPath();context.arc(x,y,r+28,0,Math.PI*2);context.stroke()}context.textAlign='center';context.fillStyle='#efbb78';context.font='48px Georgia';context.fillText('☾',600,145);context.font='700 24px Sora, sans-serif';context.fillText('IDULFITRI',600,205);context.fillStyle='#f4d49c';context.font='700 58px Sora, sans-serif';context.fillText('Mohon Maaf Lahir & Batin',600,295);context.fillStyle='#f1f3eb';context.font='500 32px "Inter", sans-serif';if(card.recipient)context.fillText(`Untuk ${card.recipient}`,600,365,{maxWidth:1000});const words=(card.message||'').split(/\s+/),lines=[];let line='';for(const word of words){const test=line?`${line} ${word}`:word;if(context.measureText(test).width>850&&line){lines.push(line);line=word}else line=test}if(line)lines.push(line);context.font='400 27px "Inter", sans-serif';context.fillStyle='#f1f3eb';lines.slice(0,4).forEach((text,i)=>context.fillText(text,600,430+i*40,{maxWidth:900}));context.fillStyle='#efbb78';context.font='600 23px "Inter", sans-serif';context.fillText(`Dari, ${card.sender||db.settings.displayName}`,600,650,{maxWidth:1000});canvas.toBlob(blob=>{if(!blob){notify('Kartu gagal dibuat');return}const link=document.createElement('a');link.href=URL.createObjectURL(blob);link.download='kartu-lebaran-ramadhanpro.png';link.click();URL.revokeObjectURL(link.href);notify('Kartu Lebaran berhasil diunduh')},'image/png')}
-    document.addEventListener('click',e=>{const button=e.target.closest('[data-theme-choice],[data-mode-choice]');if(!button)return;e.stopImmediatePropagation();if(button.dataset.themeChoice)db.settings.theme=button.dataset.themeChoice;if(button.dataset.modeChoice)db.settings.mode=button.dataset.modeChoice;save();render()},true);
-    document.addEventListener('click',e=>{const button=e.target.closest('[data-action="calendar-select"],[data-action="calendar-open"],[data-action="locate-prayer"],[data-action="calculate-prayer"]');if(!button)return;e.stopImmediatePropagation();if(button.dataset.action==='calendar-select'){selectedDate=button.dataset.date;render()}else if(button.dataset.action==='calendar-open'){selectedDate=button.dataset.date;view='daily';render()}else if(button.dataset.action==='locate-prayer')locatePrayer();else if(button.dataset.action==='calculate-prayer'){const result=prayerSchedule();if(result)notify(`Jadwal dihitung dengan ${result.method}`);else notify('Lengkapi koordinat dan zona waktu yang valid.');render()}},true);
-    document.addEventListener('change',e=>{const field=e.target.closest('[data-prayer-setting]');if(!field)return;e.stopImmediatePropagation();const key=field.dataset.prayerSetting,value=['latitude','longitude','imsakOffset'].includes(key)?(field.value===''?null:Number(field.value)):field.value;db.settings[key]=value;save();render()},true);
-    document.addEventListener('change',e=>{const field=e.target;if(field.matches('[data-action="fast-date"]')&&field.closest('#syawal-tracker')){e.stopImmediatePropagation();addFast('syawal',field.value)}},true);
 
     const CITIES=[['Jakarta',-6.2088,106.8456,'Asia/Jakarta'],['Bandung',-6.9175,107.6191,'Asia/Jakarta'],['Bogor',-6.5971,106.806,'Asia/Jakarta'],['Depok',-6.4025,106.7942,'Asia/Jakarta'],['Bekasi',-6.2383,106.9756,'Asia/Jakarta'],['Tangerang',-6.1783,106.6319,'Asia/Jakarta'],['Serang',-6.1201,106.1503,'Asia/Jakarta'],['Cirebon',-6.732,108.5523,'Asia/Jakarta'],['Tegal',-6.8694,109.1402,'Asia/Jakarta'],['Purwokerto',-7.4242,109.2303,'Asia/Jakarta'],['Semarang',-6.9667,110.4167,'Asia/Jakarta'],['Yogyakarta',-7.7956,110.3695,'Asia/Jakarta'],['Surakarta (Solo)',-7.5666,110.8283,'Asia/Jakarta'],['Surabaya',-7.2575,112.7521,'Asia/Jakarta'],['Malang',-7.9666,112.6326,'Asia/Jakarta'],['Kediri',-7.848,112.0178,'Asia/Jakarta'],['Jember',-8.1845,113.6681,'Asia/Jakarta'],['Banyuwangi',-8.2192,114.3691,'Asia/Jakarta'],['Banda Aceh',5.5483,95.3238,'Asia/Jakarta'],['Medan',3.5952,98.6722,'Asia/Jakarta'],['Padang',-0.9471,100.4172,'Asia/Jakarta'],['Pekanbaru',0.5071,101.4478,'Asia/Jakarta'],['Batam',1.0456,104.0305,'Asia/Jakarta'],['Jambi',-1.6101,103.6131,'Asia/Jakarta'],['Palembang',-2.9761,104.7754,'Asia/Jakarta'],['Bengkulu',-3.7928,102.2608,'Asia/Jakarta'],['Bandar Lampung',-5.45,105.2667,'Asia/Jakarta'],['Pangkalpinang',-2.1291,106.109,'Asia/Jakarta'],['Pontianak',-0.0263,109.3425,'Asia/Jakarta'],['Palangkaraya',-2.2096,113.9166,'Asia/Jakarta'],['Banjarmasin',-3.3186,114.5944,'Asia/Makassar'],['Balikpapan',-1.2379,116.8529,'Asia/Makassar'],['Samarinda',-0.5022,117.1536,'Asia/Makassar'],['Denpasar',-8.6705,115.2126,'Asia/Makassar'],['Mataram',-8.5833,116.1167,'Asia/Makassar'],['Kupang',-10.1772,123.607,'Asia/Makassar'],['Makassar',-5.1477,119.4327,'Asia/Makassar'],['Manado',1.4748,124.8421,'Asia/Makassar'],['Palu',-0.8917,119.8707,'Asia/Makassar'],['Kendari',-3.9985,122.513,'Asia/Makassar'],['Gorontalo',0.5435,123.0568,'Asia/Makassar'],['Ambon',-3.6954,128.1814,'Asia/Jayapura'],['Ternate',0.7833,127.3667,'Asia/Jayapura'],['Jayapura',-2.5337,140.7181,'Asia/Jayapura'],['Kuala Lumpur',3.139,101.6869,'Asia/Kuala_Lumpur'],['Singapura',1.3521,103.8198,'Asia/Singapore'],['Makkah',21.3891,39.8579,'Asia/Riyadh','ummAlQura'],['Madinah',24.4686,39.6142,'Asia/Riyadh','ummAlQura']];
     const DOA=[['Niat puasa Ramadhan','نَوَيْتُ صَوْمَ غَدٍ عَنْ أَدَاءِ فَرْضِ شَهْرِ رَمَضَانَ هَذِهِ السَّنَةِ لِلَّهِ تَعَالَى','Nawaitu shauma ghadin ‘an adā’i fardhi syahri ramadhāna hādzihis-sanati lillāhi ta‘ālā.','Aku berniat puasa esok hari untuk menunaikan kewajiban bulan Ramadhan tahun ini karena Allah Ta‘ala.','Lafaz yang lazim diamalkan di Indonesia'],['Doa berbuka puasa','ذَهَبَ الظَّمَأُ وَابْتَلَّتِ الْعُرُوقُ وَثَبَتَ الْأَجْرُ إِنْ شَاءَ اللَّهُ','Dzahabaz-zhama’u wabtallatil-‘urūqu wa tsabatal-ajru insyā’allāh.','Telah hilang dahaga, urat-urat telah basah, dan pahala insya Allah telah tetap.','HR. Abu Dawud'],['Doa untuk yang menjamu berbuka','أَفْطَرَ عِنْدَكُمُ الصَّائِمُونَ وَأَكَلَ طَعَامَكُمُ الْأَبْرَارُ وَصَلَّتْ عَلَيْكُمُ الْمَلَائِكَةُ','Afthara ‘indakumush-shā’imūna wa akala tha‘āmakumul-abrāru wa shallat ‘alaikumul-malā’ikatu.','Orang-orang berpuasa telah berbuka di sisi kalian, orang-orang baik telah memakan makanan kalian, dan para malaikat mendoakan kalian.','HR. Abu Dawud'],['Doa malam Lailatul Qadar','اللَّهُمَّ إِنَّكَ عَفُوٌّ تُحِبُّ الْعَفْوَ فَاعْفُ عَنِّي','Allāhumma innaka ‘afuwwun tuhibbul-‘afwa fa‘fu ‘annī.','Ya Allah, Engkau Maha Pemaaf dan menyukai maaf, maka maafkanlah aku.','HR. Tirmidzi']];
@@ -308,8 +471,8 @@
     setInterval(()=>{document.querySelectorAll('[data-at]').forEach(el=>{const d=Number(el.dataset.at)-Date.now();if(d<=0){if(view==='home')render();return}el.textContent=fmtCountdown(d)})},1000);
     const SOC=[['Instagram','https://instagram.com/kurniapedia','<rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.5 6.5h.01"/>'],['TikTok','https://www.tiktok.com/@kurniapedia','<path d="M14 3v11.5a3.5 3.5 0 1 1-3.5-3.5M14 3c.4 2.4 2 4 4.5 4.3"/>'],['Kurniapedia','https://kurniapedia.my.id/','<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/>'],['WhatsApp','https://wa.me/6285870906050','<path d="M20 11.5a8 8 0 0 1-11.7 7L4 20l1.5-4.2A8 8 0 1 1 20 11.5z"/>']];
     function footerHTML(){return `<footer class="app-footer"><div class="social">${SOC.map(([n,u,d])=>`<a href="${u}" target="_blank" rel="noopener noreferrer" aria-label="${n}" title="${n}"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg></a>`).join('')}</div><p>Crafted with <span class="heart">♥</span> by Kurniapedia 2026</p></footer>`}
-    document.addEventListener('change',e=>{const el=e.target.closest('[data-city-pick]');if(!el||el.value==='')return;e.stopImmediatePropagation();const c=CITIES[Number(el.value)];if(!c)return;Object.assign(db.settings,{city:c[0],latitude:c[1],longitude:c[2],timezone:c[3]});if(c[4])db.settings.prayerMethod=c[4];save();render();notify(`Lokasi diatur ke ${c[0]}`)},true);
     window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();window.installPrompt=e});
+    {const v=new URLSearchParams(location.search).get('view');if(['home','calendar','daily','plan','report','settings'].includes(v))view=v}
     render();
     const startupScreen=document.getElementById('startup-screen'),loginScreen=document.getElementById('login-screen'),profileForm=document.getElementById('profile-form'),profileInput=document.getElementById('profile-name-input');
     function profileIsReady(){try{return localStorage.getItem('ramadhanpro-profile-ready')==='1'}catch{return false}}
@@ -317,9 +480,6 @@
     window.setTimeout(()=>{startupScreen.classList.add('is-leaving');window.setTimeout(()=>{startupScreen.hidden=true;if(!profileIsReady()){profileInput.value=db.settings.displayName==='Sahabat'?'':db.settings.displayName;loginScreen.hidden=false;profileInput.focus()}},550)},900);
     profileForm.addEventListener('submit',event=>{event.preventDefault();finishProfile(profileInput.value)});
     document.getElementById('profile-skip').addEventListener('click',()=>finishProfile());
-    document.addEventListener('click',event=>{const trigger=event.target.closest('[data-dialog]'),close=event.target.closest('[data-close-dialog]');if(close){close.closest('dialog')?.close();return}if(trigger)document.getElementById(trigger.dataset.dialog)?.showModal()});
-    document.addEventListener('click',event=>{if(event.target.matches('dialog.help-dialog'))event.target.close()});
-    document.addEventListener('click',e=>{const t=e.target.closest('[data-tab]');if(t){const d=t.closest('dialog');d.querySelectorAll('[data-tab]').forEach(b=>b.classList.toggle('on',b===t));d.querySelectorAll('[data-pane]').forEach(x=>x.hidden=x.dataset.pane!==t.dataset.tab);return}if(e.target.matches('dialog.app-dialog'))e.target.close()});
   </script>
 </body>
 </html>
