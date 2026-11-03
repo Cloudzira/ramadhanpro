@@ -1,5 +1,10 @@
 # Catatan perubahan
 
+## 1.4.1 — Penyesuaian Cloudflare Pages
+- `vercel.json` diganti `public/_headers` (format header Cloudflare Pages).
+- `.node-version` (22) agar build memakai Node yang cocok dengan Vite 7.
+- README: panduan pengaturan build Cloudflare Pages, termasuk `SKIP_DEPENDENCY_INSTALL` untuk mengatasi `npm clean-install` yang gagal saat `package-lock.json` tidak sinkron.
+
 ## 1.4.0 — Pemasangan langsung dan tanggal Hijriah
 - Tombol **Pasang** kini langsung memunculkan jendela pemasangan resmi browser (Chrome/Edge/Samsung Internet), bukan petunjuk. Tombol menonjol saat pemasangan siap, tersembunyi setelah aplikasi terpasang, dan ada juga di popup Panduan. Di iPhone/iPad, Safari memang tidak menyediakan pemasangan lewat kode, jadi hanya muncul petunjuk singkat.
 - Event pemasangan ditangkap sedini mungkin (skrip kecil di `<head>`) agar tidak terlewat sebelum aplikasi selesai dimuat.
@@ -9,7 +14,7 @@
 ## 1.3.0 — Pengemasan
 - Skrip inline dipindah ke `src/app.js`; konten doa, kutipan, dan kota ke `src/data/` agar mudah diperiksa.
 - Gambar pratinjau `og-image.png` dan tag Open Graph otomatis (alamat situs dibaca dari lingkungan build).
-- `vercel.json`: header keamanan dan cache.
+- Header keamanan dan cache (sekarang lewat `public/_headers`).
 - Tes kesiapan build dan tes "tombol tanpa penangan".
 - `.editorconfig`, CHANGELOG.
 

@@ -18,7 +18,7 @@ npm run build
 npm run preview
 ```
 
-Folder `dist/` dapat di-host sebagai situs statis, misalnya Cloudflare Pages, Vercel, atau GitHub Pages. Gunakan build command `npm run build` dan output directory `dist`. Paket, build, dan hosting dapat dimulai dengan layanan gratis; kuota serta ketentuan penyedia dapat berubah.
+Folder `dist/` dapat di-host sebagai situs statis (Cloudflare Pages, Vercel, GitHub Pages, dll.). Gunakan build command `npm run build` dan output directory `dist`. Paket, build, dan hosting dapat dimulai dengan layanan gratis; kuota serta ketentuan penyedia dapat berubah.
 
 ## Struktur proyek
 
@@ -36,7 +36,7 @@ Folder `dist/` dapat di-host sebagai situs statis, misalnya Cloudflare Pages, Ve
 | `src/dom-patch.js` | Pembaruan tampilan per bagian (ketikan dan fokus tidak hilang) |
 | `config/site-url.js` | Menentukan alamat situs saat build untuk tag Open Graph |
 | `vite.config.js` | **Satu-satunya** konfigurasi PWA: manifest dan service worker dibuat otomatis |
-| `vercel.json` | Header keamanan dan cache untuk Vercel |
+| `public/_headers` | Header keamanan dan cache untuk Cloudflare Pages |
 | `public/` | Ikon aplikasi dan `og-image.png` (pratinjau saat tautan dibagikan) |
 | `tests/` | Tes otomatis (`npm test`) |
 | `docs/` | Contoh tampilan (tidak ikut di-build) |
@@ -54,15 +54,32 @@ Jangan menambahkan `sw.js` atau `manifest.json` manual di root; keduanya dihasil
 
 Tombol **Pasang** di header dan di popup Panduan langsung membuka jendela pemasangan browser. Ini bekerja di Chrome, Edge, dan Samsung Internet (Android dan desktop) setelah halaman dimuat dan memenuhi syarat PWA. Di iPhone/iPad (Safari) pemasangan lewat kode tidak tersedia; pengguna perlu memilih "Tambah ke Layar Utama" dari menu Bagikan, dan aplikasi menampilkan petunjuk singkat itu. Logikanya ada di `src/install.js`.
 
+## Deploy di Cloudflare Pages
+
+Pengaturan yang disarankan (Workers & Pages → proyek → Settings):
+
+| Pengaturan | Nilai |
+| --- | --- |
+| Build command | `npm install && npm run build` |
+| Build output directory | `dist` |
+| Environment variable `SKIP_DEPENDENCY_INSTALL` | `true` (Production **dan** Preview) |
+| Environment variable `SITE_URL` (opsional) | alamat situs, mis. `https://nama-proyek.pages.dev/` |
+
+Penjelasan singkat:
+
+- Secara bawaan Cloudflare menjalankan `npm clean-install` sebelum build. Perintah itu **gagal** bila `package-lock.json` tidak sinkron dengan `package.json` (misalnya setelah menambah paket tanpa menjalankan `npm install` di komputer). `SKIP_DEPENDENCY_INSTALL=true` mematikan langkah itu, lalu `npm install` pada build command memperbaruinya otomatis.
+- Versi Node dikunci oleh file `.node-version` (22). Vite 7 membutuhkan Node 20.19 atau lebih baru.
+- Header keamanan dan cache diatur oleh `public/_headers`.
+
 ## Pratinjau tautan (Open Graph)
 
 Saat tautan dibagikan ke WhatsApp, Telegram, atau media sosial, `public/og-image.png` dipakai sebagai gambar pratinjau. Tag `og:url`, `og:image`, dan `canonical` memerlukan alamat mutlak, jadi ditambahkan saat build dari lingkungan:
 
-1. `SITE_URL` (atur sendiri, mis. `https://kurniapedia.my.id/ramadhanpro/`)
+1. `SITE_URL` (atur sendiri; **wajib diatur di Cloudflare Pages** agar tag ini muncul)
 2. `VERCEL_PROJECT_PRODUCTION_URL` (otomatis di Vercel)
 3. `GITHUB_REPOSITORY` (otomatis di GitHub Actions → `https://pemilik.github.io/nama-repo/`)
 
-Jika memakai domain sendiri, tambahkan variabel `SITE_URL` di pengaturan Environment Variables Vercel (atau di workflow GitHub) agar tautan pratinjau memakai domain tersebut.
+Tanpa salah satunya, tag tersebut dilewati (tidak diisi asal). Alamat khusus tiap deploy dari Cloudflare (`CF_PAGES_URL`) sengaja tidak dipakai karena berubah di setiap build.
 
 ## Menambah interaksi baru
 

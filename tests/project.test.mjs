@@ -118,3 +118,10 @@ test('tanggal Hijriah tampil di atas tanggal Masehi', () => {
   const line = app.slice(at, app.indexOf('</div>', at));
   assert.ok(line.indexOf('hijriLabel()') > -1 && line.indexOf('hijriLabel()') < line.indexOf('Intl.DateTimeFormat'), 'hijriLabel() harus di depan Intl.DateTimeFormat');
 });
+
+test('konfigurasi Cloudflare Pages: _headers dan versi Node tersedia', () => {
+  assert.ok(existsSync(join(root, 'public/_headers')), 'public/_headers hilang');
+  assert.match(read('public/_headers'), /^\/\*\n\s+X-Content-Type-Options: nosniff/m);
+  assert.equal(existsSync(join(root, 'vercel.json')), false, 'vercel.json tidak dipakai di Cloudflare Pages');
+  assert.match(read('.node-version').trim(), /^(2[0-9])(\.\d+)*$/, '.node-version harus Node 20+ (Vite 7)');
+});

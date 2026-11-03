@@ -6,6 +6,8 @@
 //   1. SITE_URL                        (atur sendiri, mis. https://kurniapedia.my.id/ramadhanpro/)
 //   2. VERCEL_PROJECT_PRODUCTION_URL   (otomatis di Vercel)
 //   3. GITHUB_REPOSITORY               (otomatis di GitHub Actions → https://pemilik.github.io/nama-repo/)
+// Di Cloudflare Pages tidak ada variabel alamat produksi yang stabil (CF_PAGES_URL berubah tiap deploy),
+// jadi atur SITE_URL di Settings → Environment variables.
 // Mengembalikan alamat berakhiran "/" atau null bila tidak ditemukan / tidak valid.
 
 function normalize(value) {
