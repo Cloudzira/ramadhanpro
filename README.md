@@ -24,17 +24,21 @@ Folder `dist/` dapat di-host sebagai situs statis, misalnya Cloudflare Pages, Ve
 
 | Berkas | Fungsi |
 | --- | --- |
-| `index.html` | Antarmuka dan logika aplikasi (satu router event di bagian "EVENT ROUTER") |
+| `index.html` | Kerangka halaman dan layar pembuka/masuk (tanpa skrip dan gaya inline) |
+| `src/app.js` | Logika aplikasi, tampilan, dan satu router event ("EVENT ROUTER") |
 | `src/styles.css` | Seluruh gaya, berlapis dari 1 sampai 6; lapisan akhir menimpa lapisan awal |
-| `src/prayer.js` | Perhitungan jadwal salat dan arah kiblat (Adhan JS), preset Kemenag RI, koreksi manual |
+| `src/data/` | Konten ibadah: `doa.js`, `quotes.js` (ayat/hadis), `cities.js` — mudah diperiksa ustaz tanpa menyentuh kode |
+| `src/prayer.js` | Jadwal salat dan arah kiblat (Adhan JS), preset Kemenag RI, koreksi manual |
 | `src/hijri.js` | Tanggal Hijriah perkiraan (Umm al-Qura) dan perkiraan awal Ramadhan |
-| `src/reminders.js` | Logika pengingat waktu salat (siapa yang jatuh tempo, tanpa duplikat) |
-| `src/storage.js` | Penyimpanan IndexedDB, permintaan perlindungan penyimpanan, status ruang |
-| `src/backup.js` | Skema data, validasi berkas cadangan, pemilihan data terbaru, pengingat cadangan |
+| `src/reminders.js` | Logika pengingat waktu salat (jatuh tempo, tanpa duplikat) |
+| `src/storage.js` | IndexedDB, permintaan perlindungan penyimpanan, status ruang |
+| `src/backup.js` | Skema data, validasi cadangan, pemilihan data terbaru, pengingat cadangan |
 | `src/dom-patch.js` | Pembaruan tampilan per bagian (ketikan dan fokus tidak hilang) |
+| `config/site-url.js` | Menentukan alamat situs saat build untuk tag Open Graph |
+| `vite.config.js` | **Satu-satunya** konfigurasi PWA: manifest dan service worker dibuat otomatis |
+| `vercel.json` | Header keamanan dan cache untuk Vercel |
+| `public/` | Ikon aplikasi dan `og-image.png` (pratinjau saat tautan dibagikan) |
 | `tests/` | Tes otomatis (`npm test`) |
-| `vite.config.js` | **Satu-satunya** konfigurasi PWA: manifest dan service worker dibuat otomatis saat build |
-| `public/` | Ikon aplikasi |
 | `docs/` | Contoh tampilan (tidak ikut di-build) |
 
 Jangan menambahkan `sw.js` atau `manifest.json` manual di root; keduanya dihasilkan oleh `vite-plugin-pwa`.
@@ -46,9 +50,19 @@ Jangan menambahkan `sw.js` atau `manifest.json` manual di root; keduanya dihasil
 - Peramban tanpa `backdrop-filter`, atau pengguna yang memilih "kurangi transparansi", mendapat permukaan solid. Mode kontras tinggi, warna paksa, dan "kurangi gerakan" juga didukung.
 - Warna bilah status browser (`theme-color`) mengikuti tema dan mode.
 
+## Pratinjau tautan (Open Graph)
+
+Saat tautan dibagikan ke WhatsApp, Telegram, atau media sosial, `public/og-image.png` dipakai sebagai gambar pratinjau. Tag `og:url`, `og:image`, dan `canonical` memerlukan alamat mutlak, jadi ditambahkan saat build dari lingkungan:
+
+1. `SITE_URL` (atur sendiri, mis. `https://kurniapedia.my.id/ramadhanpro/`)
+2. `VERCEL_PROJECT_PRODUCTION_URL` (otomatis di Vercel)
+3. `GITHUB_REPOSITORY` (otomatis di GitHub Actions → `https://pemilik.github.io/nama-repo/`)
+
+Jika memakai domain sendiri, tambahkan variabel `SITE_URL` di pengaturan Environment Variables Vercel (atau di workflow GitHub) agar tautan pratinjau memakai domain tersebut.
+
 ## Menambah interaksi baru
 
-Semua klik tombol diproses oleh `CLICK_ACTIONS` di `index.html`. Untuk tombol baru, beri atribut `data-action="nama-aksi"` lalu tambahkan satu entri `nama-aksi(tombol){ ... }` di objek tersebut. Perubahan input dan kolom diproses oleh `onChange` dan `onInput`.
+Semua klik tombol diproses oleh `CLICK_ACTIONS` di `src/app.js`. Untuk tombol baru, beri atribut `data-action="nama-aksi"` lalu tambahkan satu entri `nama-aksi(tombol){ ... }` di objek tersebut. Perubahan input dan kolom diproses oleh `onChange` dan `onInput`.
 
 ## Pintasan aplikasi
 
@@ -87,4 +101,9 @@ Pengingat memakai Notification API dan hanya berbunyi **selama aplikasi terbuka 
 npm test
 ```
 
-Tes memakai `node:test` bawaan Node (tanpa paket tambahan) dan dijalankan otomatis sebelum build di GitHub Actions.
+Tes memakai `node:test` bawaan Node (tanpa paket tambahan) dan dijalankan otomatis sebelum build di GitHub Actions. Selain logika, tes juga menjaga:
+
+- **Kesiapan build**: semua berkas dan paket yang diimpor ada, sintaks valid, ikon PWA tersedia.
+- **Tombol tanpa penangan**: setiap `data-action` di tampilan harus punya penangan di `src/app.js`.
+- **Kontras warna** WCAG AA untuk semua tema, mode, dan fase.
+- **Konten ibadah** tidak kosong dan teks Arab berisi huruf Arab.

@@ -1,12 +1,23 @@
+import { readFileSync } from 'node:fs';
 import { defineConfig } from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
+import { resolveSiteUrl, siteMetaTags } from './config/site-url.js';
+
+const { version } = JSON.parse(readFileSync(new URL('./package.json', import.meta.url), 'utf8'));
 
 // Satu-satunya sumber konfigurasi PWA (manifest + service worker).
 // Jangan menambah sw.js / manifest.json manual di root: keduanya dibuat otomatis saat build.
 export default defineConfig({
   base: './',
   publicDir: 'public',
+  // Nomor versi di popup Tentang selalu mengikuti package.json.
+  define: { __APP_VERSION__: JSON.stringify(version) },
   plugins: [
+    // Menambahkan og:url, og:image, dan canonical bila alamat situs diketahui (lihat config/site-url.js).
+    {
+      name: 'ramadhanpro-site-meta',
+      transformIndexHtml: () => siteMetaTags(resolveSiteUrl(process.env)),
+    },
     VitePWA({
       registerType: 'autoUpdate',
       manifestFilename: 'manifest.webmanifest',
@@ -50,6 +61,8 @@ export default defineConfig({
       workbox: {
         // woff2 ikut di-cache, jadi font tampil sempurna saat offline.
         globPatterns: ['**/*.{html,js,css,svg,png,json,webmanifest,woff2}'],
+        // Gambar pratinjau hanya untuk crawler (WhatsApp, X, dll.), tidak perlu diunduh pengguna.
+        globIgnores: ['og-image.png'],
         navigateFallback: 'index.html',
         cleanupOutdatedCaches: true,
       },
