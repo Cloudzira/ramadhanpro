@@ -56,20 +56,24 @@ Tombol **Pasang** di header dan di popup Panduan langsung membuka jendela pemasa
 
 ## Deploy di Cloudflare Pages
 
-Pengaturan yang disarankan (Workers & Pages → proyek → Settings):
+Pengaturan (Workers & Pages → proyek → Settings):
 
 | Pengaturan | Nilai |
 | --- | --- |
-| Build command | `npm install && npm run build` |
+| Build command | `npm run build` |
 | Build output directory | `dist` |
-| Environment variable `SKIP_DEPENDENCY_INSTALL` | `true` (Production **dan** Preview) |
 | Environment variable `SITE_URL` (opsional) | alamat situs, mis. `https://nama-proyek.pages.dev/` |
 
-Penjelasan singkat:
+Catatan:
 
-- Secara bawaan Cloudflare menjalankan `npm clean-install` sebelum build. Perintah itu **gagal** bila `package-lock.json` tidak sinkron dengan `package.json` (misalnya setelah menambah paket tanpa menjalankan `npm install` di komputer). `SKIP_DEPENDENCY_INSTALL=true` mematikan langkah itu, lalu `npm install` pada build command memperbaruinya otomatis.
 - Versi Node dikunci oleh file `.node-version` (22). Vite 7 membutuhkan Node 20.19 atau lebih baru.
 - Header keamanan dan cache diatur oleh `public/_headers`.
+- Cloudflare menjalankan `npm clean-install` sebelum build. Perintah itu **gagal** bila `package-lock.json` tidak sinkron dengan `package.json`, misalnya setelah menambah paket tanpa mengunggah lock yang baru. Tes `package-lock.json sinkron dengan package.json` di `tests/project.test.mjs` menangkap kasus ini lebih awal.
+
+**Jika build gagal dengan pesan `npm ci can only install packages when your package.json and package-lock.json are in sync`:**
+
+1. Cara terbaik: jalankan `npm install` di komputer (atau di GitHub Codespaces), lalu unggah `package-lock.json` yang baru.
+2. Cara darurat tanpa Node: di Cloudflare, tambahkan environment variable `SKIP_DEPENDENCY_INSTALL` = `true` (Production dan Preview) dan ubah Build command menjadi `npm install && npm run build`.
 
 ## Pratinjau tautan (Open Graph)
 

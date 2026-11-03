@@ -1,5 +1,10 @@
 # Catatan perubahan
 
+## 1.4.3 — Perbaikan build Cloudflare Pages
+- `package-lock.json` kini memuat `@fontsource/inter` dan `@fontsource/sora` (5.3.0). Sebelumnya lock tidak sinkron sehingga `npm clean-install` di Cloudflare gagal (`Missing: @fontsource/inter@5.3.0 from lock file`) dan situs terus menampilkan deploy lama.
+- Tes baru memastikan `package-lock.json` selalu sinkron dengan `package.json`.
+- README: pengaturan Cloudflare Pages disederhanakan; cara darurat `SKIP_DEPENDENCY_INSTALL` dipindah ke bagian pemecahan masalah.
+
 ## 1.4.2 — Tes lebih tahan terhadap kondisi repo
 - Pemeriksaan "file lama sudah dihapus", `vercel.json`, dan `.node-version` kini hanya **peringatan**, bukan kegagalan. Mengunggah ke GitHub tidak menghapus file lama, dan file berawalan titik sering terlewat.
 - `npm test` memakai reporter `spec`: log CI menampilkan nama tes yang gagal dengan jelas (✖).

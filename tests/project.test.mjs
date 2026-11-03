@@ -131,3 +131,17 @@ test('konfigurasi Cloudflare Pages: isi _headers valid (jika ada)', t => {
   if (!existsSync(join(root, '.node-version'))) t.diagnostic('PERINGATAN: .node-version belum ada; atur NODE_VERSION=22 di Cloudflare Pages');
   else assert.match(read('.node-version').trim(), /^(2[0-9])(\.\d+)*$/, '.node-version harus Node 20+ (Vite 7)');
 });
+
+// Kegagalan nyata, bukan sekadar peringatan: Cloudflare Pages menjalankan `npm clean-install` sebelum build,
+// dan perintah itu gagal bila package-lock.json tidak sinkron dengan package.json.
+test('package-lock.json sinkron dengan package.json (agar npm clean-install di Cloudflare tidak gagal)', () => {
+  const lock = JSON.parse(read('package-lock.json'));
+  const rootEntry = lock.packages[''];
+  const hint = 'Jalankan "npm install" lalu unggah package-lock.json yang baru.';
+  for (const group of ['dependencies', 'devDependencies']) {
+    assert.deepEqual(rootEntry[group] || {}, pkg[group] || {}, `${group} di package-lock.json berbeda dari package.json. ${hint}`);
+  }
+  for (const name of declared) {
+    assert.ok(lock.packages[`node_modules/${name}`], `"${name}" belum ada di package-lock.json. ${hint}`);
+  }
+});

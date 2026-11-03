@@ -1,7 +1,7 @@
 {
   "name": "ramadhanpro",
   "private": true,
-  "version": "1.4.2",
+  "version": "1.4.3",
   "description": "PWA pendamping ibadah Ramadhan: jadwal salat lokal, mutabaah, zakat, doa, dan jurnal privat.",
   "type": "module",
   "engines": {
