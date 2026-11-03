@@ -50,6 +50,10 @@ Jangan menambahkan `sw.js` atau `manifest.json` manual di root; keduanya dihasil
 - Peramban tanpa `backdrop-filter`, atau pengguna yang memilih "kurangi transparansi", mendapat permukaan solid. Mode kontras tinggi, warna paksa, dan "kurangi gerakan" juga didukung.
 - Warna bilah status browser (`theme-color`) mengikuti tema dan mode.
 
+## Pemasangan aplikasi (PWA)
+
+Tombol **Pasang** di header dan di popup Panduan langsung membuka jendela pemasangan browser. Ini bekerja di Chrome, Edge, dan Samsung Internet (Android dan desktop) setelah halaman dimuat dan memenuhi syarat PWA. Di iPhone/iPad (Safari) pemasangan lewat kode tidak tersedia; pengguna perlu memilih "Tambah ke Layar Utama" dari menu Bagikan, dan aplikasi menampilkan petunjuk singkat itu. Logikanya ada di `src/install.js`.
+
 ## Pratinjau tautan (Open Graph)
 
 Saat tautan dibagikan ke WhatsApp, Telegram, atau media sosial, `public/og-image.png` dipakai sebagai gambar pratinjau. Tag `og:url`, `og:image`, dan `canonical` memerlukan alamat mutlak, jadi ditambahkan saat build dari lingkungan:

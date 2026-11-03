@@ -262,3 +262,14 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 @media(max-width:650px){
   .panel,.hero,.inspiration-panel,.next-card,.eid-preview{-webkit-backdrop-filter:blur(12px) saturate(150%);backdrop-filter:blur(12px) saturate(150%)}
 }
+
+/* Tanggal Hijriah tampil di atas tanggal Masehi. */
+.date-label .hijri{display:block;margin:0 0 3px;font-size:.95em;font-weight:700;color:var(--accent);opacity:1}
+
+/* Tombol Pasang: tersembunyi bila sudah terpasang; menonjol bila jendela pemasangan siap. */
+.install-btn .install-label{display:none}
+:root[data-install=installed] [data-action=install]{display:none}
+:root[data-install=prompt] .install-btn{width:auto;padding:0 14px 0 12px;display:inline-flex;align-items:center;gap:8px;border-color:transparent;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#0b0f1a;font-weight:700;box-shadow:0 8px 24px -10px var(--accent)}
+:root[data-install=prompt] .install-btn .install-label{display:inline;font-size:13px}
+:root[data-mode=light][data-install=prompt] .install-btn{color:#fff}
+:root[data-install=wait] .install-cta,:root[data-install=ios] .install-cta{opacity:.9}

@@ -103,3 +103,18 @@ test('nomor versi di popup mengikuti package.json', () => {
   assert.match(read('src/app.js'), /querySelectorAll\('\[data-app-version\]'\)/);
   assert.match(pkg.version, /^\d+\.\d+\.\d+$/);
 });
+
+test('tombol Pasang memanggil jendela pemasangan langsung', () => {
+  const html = read('index.html'), app = read('src/app.js');
+  assert.match(html, /window\.__installEvent\s*=\s*event/, 'event pemasangan harus ditangkap sedini mungkin');
+  assert.match(app, /await event\.prompt\(\)/);
+  assert.match(app, /window\.addEventListener\('appinstalled'/);
+  assert.match(read('src/styles.css'), /data-install=installed\] \[data-action=install\]\{display:none\}/);
+});
+
+test('tanggal Hijriah tampil di atas tanggal Masehi', () => {
+  const app = read('src/app.js');
+  const at = app.indexOf('class="date-label"');
+  const line = app.slice(at, app.indexOf('</div>', at));
+  assert.ok(line.indexOf('hijriLabel()') > -1 && line.indexOf('hijriLabel()') < line.indexOf('Intl.DateTimeFormat'), 'hijriLabel() harus di depan Intl.DateTimeFormat');
+});

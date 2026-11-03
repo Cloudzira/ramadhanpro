@@ -1,5 +1,11 @@
 # Catatan perubahan
 
+## 1.4.0 — Pemasangan langsung dan tanggal Hijriah
+- Tombol **Pasang** kini langsung memunculkan jendela pemasangan resmi browser (Chrome/Edge/Samsung Internet), bukan petunjuk. Tombol menonjol saat pemasangan siap, tersembunyi setelah aplikasi terpasang, dan ada juga di popup Panduan. Di iPhone/iPad, Safari memang tidak menyediakan pemasangan lewat kode, jadi hanya muncul petunjuk singkat.
+- Event pemasangan ditangkap sedini mungkin (skrip kecil di `<head>`) agar tidak terlewat sebelum aplikasi selesai dimuat.
+- Tanggal Hijriah tampil **di atas** tanggal Masehi pada header.
+- Tes baru untuk logika pemasangan dan urutan tanggal.
+
 ## 1.3.0 — Pengemasan
 - Skrip inline dipindah ke `src/app.js`; konten doa, kutipan, dan kota ke `src/data/` agar mudah diperiksa.
 - Gambar pratinjau `og-image.png` dan tag Open Graph otomatis (alamat situs dibaca dari lingkungan build).
