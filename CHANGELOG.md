@@ -1,5 +1,9 @@
 # Catatan perubahan
 
+## 1.4.2 — Tes lebih tahan terhadap kondisi repo
+- Pemeriksaan "file lama sudah dihapus", `vercel.json`, dan `.node-version` kini hanya **peringatan**, bukan kegagalan. Mengunggah ke GitHub tidak menghapus file lama, dan file berawalan titik sering terlewat.
+- `npm test` memakai reporter `spec`: log CI menampilkan nama tes yang gagal dengan jelas (✖).
+
 ## 1.4.1 — Penyesuaian Cloudflare Pages
 - `vercel.json` diganti `public/_headers` (format header Cloudflare Pages).
 - `.node-version` (22) agar build memakai Node yang cocok dengan Vite 7.
