@@ -8,7 +8,8 @@
 - Tema Muslim = lavender violet, Muslimah = orchid/rose; mode Gelap tetap tersedia dengan palet ungu tua. Tampilan bawaan kini **Terang**; pengguna lama dialihkan ke Terang satu kali (bisa diganti lagi di Akun → Tema).
 - Efek kaca/aurora lama dihapus; semua warna kini berasal dari token di `src/styles.css` bagian 4.
 - Kalender kini berupa kalender bulanan penuh yang mengikuti tanggal hari ini: bisa pindah bulan, tombol “Hari ini”, tanggal Hijriah di tiap kotak, dan 30 hari Ramadhan ditandai.
-- Format tanggal di seluruh aplikasi: tanggal/bulan/tahun (contoh 20/2/2027).
+- Format tanggal di seluruh aplikasi: tanggal/bulan/tahun (contoh 20/2/2027), termasuk kolom isian tanggal (ketik langsung atau pilih lewat ikon kalender; tidak lagi bergantung bahasa browser).
+- Urutan menu: Beranda, Rencana, Kalender, Mutabaah, Rapor, Akun.
 - `tests/theme-contrast.test.mjs` ditulis ulang untuk desain baru (4 kombinasi tema × mode, WCAG AA).
 
 ## 1.4.3 — Perbaikan build Cloudflare Pages
