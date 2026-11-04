@@ -301,3 +301,4 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 
 .dmy{position:relative;display:block}.dmy-text{width:100%;padding:12px 46px 12px 14px;background:var(--surface-2);border:1px solid var(--line);border-radius:14px;color:var(--text);font:inherit}.dmy-text::placeholder{color:var(--muted);opacity:1}.dmy-pick{position:absolute;right:5px;top:50%;width:36px;height:36px;transform:translateY(-50%);display:grid;place-items:center;border:0;border-radius:50%;background:transparent;color:var(--muted)}.dmy-pick:hover{color:var(--accent);background:var(--accent-soft)}.dmy-pick .ic{width:18px;height:18px}.dmy-native{position:absolute;right:5px;bottom:0;width:1px;height:1px;opacity:0;pointer-events:none;border:0;padding:0}
 .avatar span.avatar-ic{display:grid;place-items:center}.avatar-ic .ic{width:42px;height:42px;stroke-width:1.8}
+.side-hi{text-align:center;text-wrap:balance;font-size:14.5px;line-height:1.35}

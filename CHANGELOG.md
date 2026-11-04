@@ -10,6 +10,7 @@
 - Kalender kini berupa kalender bulanan penuh yang mengikuti tanggal hari ini: bisa pindah bulan, tombol “Hari ini”, tanggal Hijriah di tiap kotak, dan 30 hari Ramadhan ditandai.
 - Format tanggal di seluruh aplikasi: tanggal/bulan/tahun (contoh 20/2/2027; tanggal di header tetap “4 November 2026”), termasuk kolom isian tanggal (ketik langsung atau pilih lewat ikon kalender; tidak lagi bergantung bahasa browser).
 - Ikon aplikasi (tab browser, PWA, apple-touch) kini sama dengan ikon splash: bulan sabit putih di atas gradien ungu. Avatar sidebar memakai ikon, bukan inisial.
+- Sapaan memakai salam “Assalamu’alaikum, Nama!” di sidebar dan banner Beranda (menggantikan “Hi” dan “Selamat pagi/siang/sore”).
 - Urutan menu: Beranda, Rencana, Kalender, Mutabaah, Rapor, Akun.
 - `tests/theme-contrast.test.mjs` ditulis ulang untuk desain baru (4 kombinasi tema × mode, WCAG AA).
 
