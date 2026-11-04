@@ -32,8 +32,8 @@ export default defineConfig({
         scope: './',
         display: 'standalone',
         // Tanpa "orientation": aplikasi boleh dipakai di tablet dan desktop (tata letak sidebar).
-        background_color: '#070b14',
-        theme_color: '#070b14',
+        background_color: '#d3c8f5',
+        theme_color: '#6a55cf',
         categories: ['lifestyle', 'productivity', 'education'],
         icons: [
           { src: 'icon-192.png', sizes: '192x192', type: 'image/png', purpose: 'any' },
