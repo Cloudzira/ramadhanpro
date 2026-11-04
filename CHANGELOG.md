@@ -1,5 +1,14 @@
 # Catatan perubahan
 
+## 1.5.0 — Tema Lavender (mengikuti desain contoh)
+- Tampilan baru: latar lavender, sidebar ungu melayang dengan avatar inisial + sapaan, area utama krem membulat, header dengan judul halaman, kolom cari, dan tombol bulat ungu.
+- Beranda: banner hero (ilustrasi + sapaan sesuai jam + tombol), empat kartu statistik pastel (skor hari ini, hari konsisten, shalat tercatat, halaman Qur’an) lengkap dengan sparkline 7 hari dari data nyata.
+- HP: bilah navigasi melayang berbentuk pil ungu dengan item aktif putih dan tombol “+” untuk langsung mencatat mutabaah.
+- Kolom cari di header mengarahkan ke fitur yang cocok (mis. “zakat”, “kalender”, “tema”).
+- Tema Muslim = lavender violet, Muslimah = orchid/rose; mode Gelap tetap tersedia dengan palet ungu tua. Tampilan bawaan kini **Terang**; pengguna lama dialihkan ke Terang satu kali (bisa diganti lagi di Akun → Tema).
+- Efek kaca/aurora lama dihapus; semua warna kini berasal dari token di `src/styles.css` bagian 4.
+- `tests/theme-contrast.test.mjs` ditulis ulang untuk desain baru (4 kombinasi tema × mode, WCAG AA).
+
 ## 1.4.3 — Perbaikan build Cloudflare Pages
 - `package-lock.json` kini memuat `@fontsource/inter` dan `@fontsource/sora` (5.3.0). Sebelumnya lock tidak sinkron sehingga `npm clean-install` di Cloudflare gagal (`Missing: @fontsource/inter@5.3.0 from lock file`) dan situs terus menampilkan deploy lama.
 - Tes baru memastikan `package-lock.json` selalu sinkron dengan `package.json`.
