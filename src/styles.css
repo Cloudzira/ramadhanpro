@@ -328,3 +328,16 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 @keyframes search-hit{0%,35%{box-shadow:0 0 0 3px var(--accent),0 0 0 9px var(--accent-soft)}100%{box-shadow:0 0 0 0 transparent,0 0 0 0 transparent}}
 @media(max-width:650px){.search-row{gap:10px;padding:10px 8px}.search-where{display:none}.search-pop{border-radius:18px}}
 @media(prefers-reduced-motion:reduce){.search-hit{animation:none;outline:3px solid var(--accent);outline-offset:2px}}
+
+/* ───────── HP: navigasi bawah diam di tempat ─────────
+   Sebelumnya seluruh halaman yang menggulir, sehingga saat bilah alamat browser
+   mengecil/membesar, navigasi ikut naik-turun. Kini halaman dikunci setinggi layar
+   dan hanya .shell yang menggulir, jadi navigasi bawah tidak ikut bergeser. */
+@media(max-width:650px){
+  html,body{height:100%;overflow:hidden;overscroll-behavior:none}
+  body{min-height:0}
+  .shell{position:fixed;inset:0;display:block;overflow-x:hidden;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior-y:contain;padding:calc(10px + env(safe-area-inset-top)) 10px 10px}
+  .main{min-height:calc(100% - 4px)}
+  .bottom-nav{transform:translateZ(0);will-change:transform;-webkit-transform:translateZ(0)}
+}
+

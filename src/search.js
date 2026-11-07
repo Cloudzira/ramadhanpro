@@ -440,7 +440,7 @@ export function attachSearchUI({ index, onPick, esc }) {
   });
 
   window.addEventListener('resize', place, { passive: true });
-  window.addEventListener('scroll', place, { passive: true });
+  window.addEventListener('scroll', place, { passive: true, capture: true }); // capture: di HP yang bergulir adalah .shell, bukan halaman
   window.visualViewport?.addEventListener('resize', place, { passive: true });
   window.visualViewport?.addEventListener('scroll', place, { passive: true });
 

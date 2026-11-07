@@ -8,6 +8,7 @@
 - Memilih hasil membuka halaman yang tepat, menggulir ke bagiannya, menyorotnya sebentar, dan membuka doa yang dipilih.
 - Navigasi keyboard (↑ ↓ Enter Esc), tombol hapus (×), saran cepat saat kolom kosong, dan penyorotan kata yang cocok. Daftar hasil menyesuaikan posisi saat keyboard HP terbuka.
 - Tes baru: `tests/search.test.mjs`.
+- HP: navigasi bawah tidak lagi ikut naik-turun saat halaman digulir. Halaman dikunci setinggi layar dan hanya area isi (`.shell`) yang menggulir, sehingga perubahan tinggi bilah alamat browser tidak menggeser navigasi.
 
 ## 1.5.1 — Pengerasan keamanan untuk peluncuran
 - Perbaikan keamanan: nilai `dependents`/`wealth` dari berkas cadangan tidak lagi bisa menyisipkan atribut HTML. Kunci pengaturan tambahan kini hanya menerima angka/boolean, semua atribut `value` di-escape, dan pengaturan yang dimuat dari penyimpanan lokal ikut disanitasi.
