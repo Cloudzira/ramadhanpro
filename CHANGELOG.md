@@ -1,5 +1,19 @@
 # Catatan perubahan
 
+## 1.5.2 — Pencarian baru & tombol “+” dihapus
+- HP (potret): tombol bulat “+” di kanan bawah dihapus; bilah navigasi kini memakai lebar penuh.
+- Pencarian dirombak total (`src/search.js`): hasil muncul langsung saat mengetik, bukan hanya saat menekan Enter.
+- Mencari ke dalam isi aplikasi: 40+ fitur/bagian (jadwal, hidrasi, zakat, qadha, tarawih, kartu Lebaran, tema, cadangan, dst.) **dan setiap doa** (judul, lafaz Arab, transliterasi, terjemah).
+- Toleran ejaan dan salah ketik: “sholat/salat/solat”, “dzikir/zikir”, “itikaf/iktikaf”, “zakta” → tetap ketemu.
+- Memilih hasil membuka halaman yang tepat, menggulir ke bagiannya, menyorotnya sebentar, dan membuka doa yang dipilih.
+- Navigasi keyboard (↑ ↓ Enter Esc), tombol hapus (×), saran cepat saat kolom kosong, dan penyorotan kata yang cocok. Daftar hasil menyesuaikan posisi saat keyboard HP terbuka.
+- Tes baru: `tests/search.test.mjs`.
+
+## 1.5.1 — Pengerasan keamanan untuk peluncuran
+- Perbaikan keamanan: nilai `dependents`/`wealth` dari berkas cadangan tidak lagi bisa menyisipkan atribut HTML. Kunci pengaturan tambahan kini hanya menerima angka/boolean, semua atribut `value` di-escape, dan pengaturan yang dimuat dari penyimpanan lokal ikut disanitasi.
+- Content-Security-Policy ketat (tanpa skrip inline) lewat `public/_headers` (Cloudflare) dan tag `<meta>` saat build (GitHub Pages); tambah `X-Frame-Options`, `Cross-Origin-Opener-Policy`.
+- Skrip pemasangan dipindah ke `public/early-install.js`; tambah `robots.txt`, `.node-version`, pernyataan privasi di tab Tentang; CI memakai `npm ci`.
+
 ## 1.5.0 — Tema Lavender (mengikuti desain contoh)
 - Tampilan baru: latar lavender, sidebar ungu melayang dengan avatar inisial + sapaan, area utama krem membulat, header dengan judul halaman, kolom cari, dan tombol bulat ungu.
 - Beranda: banner hero (ilustrasi + sapaan sesuai jam + tombol), empat kartu statistik pastel (skor hari ini, hari konsisten, shalat tercatat, halaman Qur’an) lengkap dengan sparkline 7 hari dari data nyata.

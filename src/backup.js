@@ -50,7 +50,7 @@ function sanitizeAdjust(value, fallback) {
   return result;
 }
 
-function sanitizeSettings(raw, defaults) {
+export function sanitizeSettings(raw, defaults) {
   const source = isObject(raw) ? raw : {};
   const result = {};
   for (const [key, fallback] of Object.entries(defaults)) {
@@ -70,11 +70,12 @@ function sanitizeSettings(raw, defaults) {
     else if (typeof fallback === 'string') result[key] = text(value, fallback, 200);
     else result[key] = fallback;
   }
-  // Kunci tambahan (mis. dependents, wealth): hanya nilai sederhana yang diterima.
+  // Kunci tambahan (mis. dependents, wealth): hanya angka terbatas dan boolean yang diterima.
+  // String bebas ditolak agar tidak pernah sampai ke templat HTML.
   for (const [key, value] of Object.entries(source)) {
-    if (key in defaults || key === '__proto__') continue;
-    if (typeof value === 'number' && Number.isFinite(value)) result[key] = value;
-    else if (typeof value === 'string') result[key] = value.slice(0, 200);
+    if (key in defaults || key === '__proto__' || key === 'constructor' || key === 'prototype') continue;
+    if (!/^[A-Za-z][A-Za-z0-9]{0,39}$/.test(key)) continue;
+    if (typeof value === 'number' && Number.isFinite(value)) result[key] = clamp(value, -1e15, 1e15);
     else if (typeof value === 'boolean') result[key] = value;
   }
   return result;

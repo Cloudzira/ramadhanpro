@@ -107,8 +107,9 @@ test('nomor versi di popup mengikuti package.json', () => {
 });
 
 test('tombol Pasang memanggil jendela pemasangan langsung', () => {
-  const html = read('index.html'), app = read('src/app.js');
-  assert.match(html, /window\.__installEvent\s*=\s*event/, 'event pemasangan harus ditangkap sedini mungkin');
+  const html = read('index.html'), app = read('src/app.js'), early = read('public/early-install.js');
+  assert.match(html, /<script src="%BASE_URL%early-install\.js"><\/script>/, 'skrip penangkap event pemasangan harus dimuat sedini mungkin');
+  assert.match(early, /window\.__installEvent\s*=\s*event/, 'event pemasangan harus ditangkap sedini mungkin');
   assert.match(app, /await event\.prompt\(\)/);
   assert.match(app, /window\.addEventListener\('appinstalled'/);
   assert.match(read('src/styles.css'), /data-install=installed\] \[data-action=install\]\{display:none\}/);
@@ -144,4 +145,28 @@ test('package-lock.json sinkron dengan package.json (agar npm clean-install di C
   for (const name of declared) {
     assert.ok(lock.packages[`node_modules/${name}`], `"${name}" belum ada di package-lock.json. ${hint}`);
   }
+});
+
+test('keamanan: tanpa skrip inline dan CSP melarang skrip inline', () => {
+  const html = read('index.html');
+  assert.equal(/<script(?![^>]*\bsrc=)[^>]*>/.test(html), false, 'jangan taruh skrip inline; gunakan berkas src');
+  assert.equal(/\son[a-z]+\s*=/i.test(html), false, 'jangan pakai atribut event inline (onclick, dll.)');
+  const headers = read('public/_headers');
+  const csp = headers.match(/Content-Security-Policy: (.+)/)?.[1] || '';
+  assert.match(csp, /script-src 'self'(;|$)/, 'script-src harus hanya self');
+  assert.equal(/script-src[^;]*unsafe-inline/.test(csp), false);
+  assert.match(csp, /object-src 'none'/);
+  assert.match(csp, /frame-ancestors 'none'/);
+  assert.match(headers, /X-Frame-Options: DENY/);
+});
+
+test('keamanan: semua atribut value="${...}" di app.js di-escape', () => {
+  const app = read('src/app.js');
+  const bad = [...app.matchAll(/value="\$\{([^{}]*)\}"/g)].filter(m => !m[1].startsWith('esc('));
+  assert.deepEqual(bad.map(m => m[1]), []);
+});
+
+test('keamanan: app.js tidak memakai eval / new Function / document.write', () => {
+  const app = read('src/app.js');
+  assert.equal(/\beval\(|new Function|document\.write/.test(app), false);
 });

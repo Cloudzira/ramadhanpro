@@ -3,6 +3,10 @@ import { defineConfig } from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
 import { resolveSiteUrl, siteMetaTags } from './config/site-url.js';
 
+// Kebijakan keamanan konten. Di Cloudflare Pages berlaku lewat public/_headers; tag <meta> ini
+// melindungi hosting statis tanpa header kustom (GitHub Pages). frame-ancestors tidak bisa lewat <meta>.
+export const CSP = "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self'; manifest-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'";
+
 const { version } = JSON.parse(readFileSync(new URL('./package.json', import.meta.url), 'utf8'));
 
 // Satu-satunya sumber konfigurasi PWA (manifest + service worker).
@@ -17,6 +21,11 @@ export default defineConfig({
     {
       name: 'ramadhanpro-site-meta',
       transformIndexHtml: () => siteMetaTags(resolveSiteUrl(process.env)),
+    },
+    {
+      name: 'ramadhanpro-csp-meta',
+      apply: 'build',
+      transformIndexHtml: () => [{ tag: 'meta', attrs: { 'http-equiv': 'Content-Security-Policy', content: CSP }, injectTo: 'head-prepend' }],
     },
     VitePWA({
       registerType: 'autoUpdate',

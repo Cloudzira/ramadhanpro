@@ -151,3 +151,19 @@ test('pengaturan jadwal, Hijriah, dan pengingat dibersihkan saat impor', () => {
   assert.equal(ok.hijriOffset, 1);
   assert.deepEqual(validateBackup(JSON.stringify(valid()), defaults).data.settings.prayerAdjust, defaults.settings.prayerAdjust);
 });
+
+test('keamanan: string bebas di kunci pengaturan tambahan ditolak (injeksi atribut HTML)', () => {
+  const text = JSON.stringify({ settings: { dependents: '1" autofocus onfocus="alert(1)', wealth: '<img src=x onerror=alert(1)>', ok: 5, 'bad key"': 1 }, days: {} });
+  const { data } = validateBackup(text, defaults);
+  assert.equal(data.settings.dependents, undefined);
+  assert.equal(data.settings.wealth, undefined);
+  assert.equal(data.settings.ok, 5);
+  assert.equal(data.settings['bad key"'], undefined);
+});
+
+test('keamanan: kunci yang ada di bawaan tetap dipaksa bertipe angka', () => {
+  const withNumbers = { ...defaults, settings: { ...defaults.settings, dependents: 1, wealth: 0 } };
+  const { data } = validateBackup(JSON.stringify({ settings: { dependents: '9" x="', wealth: 'abc' }, days: {} }), withNumbers);
+  assert.equal(data.settings.dependents, 1);
+  assert.equal(data.settings.wealth, 0);
+});
