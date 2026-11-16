@@ -1,5 +1,10 @@
 # Catatan perubahan
 
+## 1.5.5 — Rapikan tampilan HP landscape
+- Topbar HP landscape tetap satu baris: kolom pencarian menyusut, ikon pasang/bantuan/profil tidak lagi turun ke bawah.
+- Sidebar landscape dilebarkan sedikit (208px) dan teks salam diberi ruang agar tidak menabrak garis tepi.
+- Blok “Sahabat / Catatanmu tersimpan privat…” di dasar sidebar dihapus (tidak berfungsi; info privasi sudah ada di halaman Akun).
+
 ## 1.5.4 — Notifikasi pembaruan aplikasi
 - Saat ada versi baru, banner “Versi baru tersedia” muncul di awal aplikasi dibuka (setelah layar pembuka). Tombol **Perbarui** memuat ulang ke versi terbaru; **Nanti** menutupnya dan banner muncul lagi saat aplikasi dibuka berikutnya.
 - Pengecekan pembaruan berjalan saat aplikasi dibuka, saat tab/aplikasi kembali ke layar, dan tiap 1 jam.
