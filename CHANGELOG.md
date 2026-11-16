@@ -1,5 +1,11 @@
 # Catatan perubahan
 
+## 1.5.4 — Notifikasi pembaruan aplikasi
+- Saat ada versi baru, banner “Versi baru tersedia” muncul di awal aplikasi dibuka (setelah layar pembuka). Tombol **Perbarui** memuat ulang ke versi terbaru; **Nanti** menutupnya dan banner muncul lagi saat aplikasi dibuka berikutnya.
+- Pengecekan pembaruan berjalan saat aplikasi dibuka, saat tab/aplikasi kembali ke layar, dan tiap 1 jam.
+- Pembaruan tidak lagi diterapkan diam-diam (`registerType: 'prompt'`); pendaftaran service worker kini manual lewat `src/update.js`.
+- Tes baru: `tests/update.test.mjs`.
+
 ## 1.5.3 — Perbaikan sidebar HP landscape & navigasi Akun
 - HP (landscape): sidebar tidak lagi terpotong. Sidebar kini bisa menggulir sendiri dan, di layar pendek (tinggi ≤ 560px), isinya dipadatkan: avatar mengecil, menu lebih rapat, catatan bawah disembunyikan.
 - Menu “Akun” dihapus dari sidebar dan navigasi bawah; halaman Akun dibuka lewat ikon profil di pojok kanan atas. Navigasi bawah HP kini 5 kolom.

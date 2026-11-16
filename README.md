@@ -31,6 +31,7 @@ Folder `dist/` dapat di-host sebagai situs statis (Cloudflare Pages, Vercel, Git
 | `src/prayer.js` | Jadwal salat dan arah kiblat (Adhan JS), preset Kemenag RI, koreksi manual |
 | `src/hijri.js` | Tanggal Hijriah perkiraan (Umm al-Qura) dan perkiraan awal Ramadhan |
 | `src/reminders.js` | Logika pengingat waktu salat (jatuh tempo, tanpa duplikat) |
+| `src/update.js` | Deteksi versi baru (service worker) dan banner "Versi baru tersedia" |
 | `src/storage.js` | IndexedDB, permintaan perlindungan penyimpanan, status ruang |
 | `src/backup.js` | Skema data, validasi cadangan, pemilihan data terbaru, pengingat cadangan |
 | `src/dom-patch.js` | Pembaruan tampilan per bagian (ketikan dan fokus tidak hilang) |

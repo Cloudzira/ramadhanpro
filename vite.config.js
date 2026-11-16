@@ -28,7 +28,10 @@ export default defineConfig({
       transformIndexHtml: () => [{ tag: 'meta', attrs: { 'http-equiv': 'Content-Security-Policy', content: CSP }, injectTo: 'head-prepend' }],
     },
     VitePWA({
-      registerType: 'autoUpdate',
+      // Pembaruan tidak diam-diam: versi baru menunggu sampai pengguna menekan "Perbarui" di banner (src/update.js).
+      // Pendaftaran service worker dilakukan manual di src/app.js, jadi tidak disisipkan otomatis.
+      registerType: 'prompt',
+      injectRegister: false,
       manifestFilename: 'manifest.webmanifest',
       includeAssets: ['icon.svg', 'apple-touch-icon.png'],
       manifest: {

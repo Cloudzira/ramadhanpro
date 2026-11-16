@@ -19,6 +19,7 @@ import { quoteBank } from './data/quotes.js';
 import { formatHijri, estimateRamadanStart, hijriParts } from './hijri.js';
 import { dueReminders, pruneFired, reminderMessage } from './reminders.js';
 import { installMode, installMessage, isIos, isStandalone } from './install.js';
+import { watchForUpdates, applyUpdate } from './update.js';
 
 const KEY='ramadhanpro-v1';
 /* global __APP_VERSION__ */
@@ -415,6 +416,16 @@ document.querySelectorAll('[data-app-version]').forEach(el=>{el.textContent=APP_
     const startupScreen=document.getElementById('startup-screen'),loginScreen=document.getElementById('login-screen'),profileForm=document.getElementById('profile-form'),profileInput=document.getElementById('profile-name-input');
     function profileIsReady(){try{return localStorage.getItem('ramadhanpro-profile-ready')==='1'}catch{return false}}
     function finishProfile(name=''){db.settings.displayName=name.trim()||'Sahabat';save();try{localStorage.setItem('ramadhanpro-profile-ready','1')}catch{}ensurePersistence();loginScreen.hidden=true;render()}
-    window.setTimeout(()=>{startupScreen.classList.add('is-leaving');window.setTimeout(()=>{startupScreen.hidden=true;if(!profileIsReady()){profileInput.value=db.settings.displayName==='Sahabat'?'':db.settings.displayName;loginScreen.hidden=false;profileInput.focus()}},550)},900);
+    /* Pembaruan: banner muncul begitu layar pembuka selesai (atau segera bila pembaruan baru siap sesudahnya). */
+    const updateBanner=document.getElementById('update-banner');let pendingUpdate=null,updateDismissed=false;
+    function showUpdateBanner(){if(!pendingUpdate||updateDismissed||!startupScreen.hidden)return;updateBanner.hidden=false;requestAnimationFrame(()=>updateBanner.classList.add('show'))}
+    function hideUpdateBanner(){updateBanner.classList.remove('show');window.setTimeout(()=>{updateBanner.hidden=true},260)}
+    document.getElementById('update-later').addEventListener('click',()=>{updateDismissed=true;hideUpdateBanner()});
+    document.getElementById('update-now').addEventListener('click',()=>{if(!pendingUpdate)return;const btn=document.getElementById('update-now');btn.disabled=true;btn.textContent='Memperbarui…';try{persistNow()}catch{}applyUpdate({worker:pendingUpdate,serviceWorker:navigator.serviceWorker,reload:()=>location.reload()})});
+    if('serviceWorker' in navigator&&import.meta.env?.PROD){
+      const start=()=>watchForUpdates({serviceWorker:navigator.serviceWorker,swUrl:new URL('./sw.js',document.baseURI).href,scope:new URL('./',document.baseURI).href,onUpdate:worker=>{pendingUpdate=worker;showUpdateBanner()}}).catch(()=>{});
+      document.readyState==='complete'?start():window.addEventListener('load',start,{once:true});
+    }
+    window.setTimeout(()=>{startupScreen.classList.add('is-leaving');window.setTimeout(()=>{startupScreen.hidden=true;showUpdateBanner();if(!profileIsReady()){profileInput.value=db.settings.displayName==='Sahabat'?'':db.settings.displayName;loginScreen.hidden=false;profileInput.focus()}},550)},900);
     profileForm.addEventListener('submit',event=>{event.preventDefault();finishProfile(profileInput.value)});
     document.getElementById('profile-skip').addEventListener('click',()=>finishProfile());
