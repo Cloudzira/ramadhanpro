@@ -1,5 +1,10 @@
 # Catatan perubahan
 
+## 1.5.3 — Perbaikan sidebar HP landscape & navigasi Akun
+- HP (landscape): sidebar tidak lagi terpotong. Sidebar kini bisa menggulir sendiri dan, di layar pendek (tinggi ≤ 560px), isinya dipadatkan: avatar mengecil, menu lebih rapat, catatan bawah disembunyikan.
+- Menu “Akun” dihapus dari sidebar dan navigasi bawah; halaman Akun dibuka lewat ikon profil di pojok kanan atas. Navigasi bawah HP kini 5 kolom.
+- Teks Panduan diperbarui agar menunjuk ke ikon profil di pojok kanan atas.
+
 ## 1.5.2 — Pencarian baru & tombol “+” dihapus
 - HP (potret): tombol bulat “+” di kanan bawah dihapus; bilah navigasi kini memakai lebar penuh.
 - Pencarian dirombak total (`src/search.js`): hasil muncul langsung saat mengetik, bukan hanya saat menekan Enter.
